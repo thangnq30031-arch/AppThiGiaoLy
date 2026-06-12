@@ -1,0 +1,143 @@
+import React from "react";
+import RoundLayout from "./common/RoundLayout.jsx";
+import { resolveImageUrl } from "../utils/media";
+
+export default function Round3({
+  db,
+  puzzlePieces,
+  revealedPieces,
+  puzzleAnswersStatus,
+  themeImageRevealed,
+  selectedPuzzleQ,
+  setSelectedPuzzleQ,
+  revealSinglePiece,
+  triggerCountdown,
+  stopCountdown,
+  timer,
+  isTimerRunning,
+  showAnswer,
+  setShowAnswer,
+  setThemeImageRevealed,
+  triggerToast,
+  setActiveTab,
+}) {
+  const rulesContent = `- Nhấn vào mảnh ghép để xem câu hỏi.
+- Trả lời ĐÚNG để có thể lật mảnh.
+- Nhấn "Mở Toàn Bộ" để xem toàn bộ ảnh.
+- Nhấn "Hiện Đáp Án" để xem câu trả lời chủ đề.`;
+
+  return (
+    <RoundLayout
+      roundLabel="Vòng 3"
+      roundTitle="MẢNH GHÉP CHỦ ĐỀ BÍ ẨN"
+      onClose={() => setActiveTab("welcome")}
+      rulesContent={rulesContent}
+    >
+      <div className="h-full w-full flex flex-col">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <span className="text-sm font-semibold text-purple-300">
+              Chọn một mảnh để mở câu hỏi.
+            </span>
+          </div>
+        </div>
+
+        <div className="flex-1 min-h-0 flex flex-col items-center justify-center">
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <h4 className="text-sm text-purple-300 font-bold uppercase tracking-wider mb-3">
+              Sơ đồ tinh thể
+            </h4>
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/20 shadow-2xl max-w-[900px] bg-slate-950">
+              <img
+                src={resolveImageUrl(db.round3.themeImage)}
+                alt="Bức Tranh Chủ Đề"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 z-10">
+                {puzzlePieces.map((piece, idx) => {
+                  const revealed =
+                    !!revealedPieces[piece.index] || themeImageRevealed;
+                  const answered = !!puzzleAnswersStatus[piece.index];
+                  return (
+                    <div
+                      key={piece.index}
+                      onClick={() => {
+                        if (revealed) return;
+                        setSelectedPuzzleQ(piece.index);
+                        setShowAnswer(false);
+                        setActiveTab("round3-question");
+                      }}
+                      style={{
+                        clipPath: piece.clipPath,
+                        transition: "all 0.8s cubic-bezier(0.4,0,0.2,1)",
+                      }}
+                      className={`absolute inset-0 flex items-center justify-center cursor-pointer ${revealed ? "opacity-0 pointer-events-none scale-90 translate-y-4" : "bg-gradient-to-br from-indigo-900 via-purple-950 to-slate-900/90 hover:opacity-90 active:scale-95"}`}
+                    >
+                      {!revealed && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left: `${piece.centerX}%`,
+                            top: `${piece.centerY}%`,
+                            transform: "translate(-50%, -50%)",
+                          }}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-lg border-2 shadow-2xl ${answered ? "bg-emerald-600 border-emerald-300 text-white" : "bg-slate-900 border-yellow-400 text-yellow-400 hover:scale-110"}`}
+                        >
+                          {idx + 1}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <svg
+                className="absolute inset-0 w-full h-full pointer-events-none z-20"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+              >
+                {puzzlePieces.map((piece, idx) => {
+                  const revealed =
+                    !!revealedPieces[piece.index] || themeImageRevealed;
+                  if (revealed) return null;
+                  const pointsStr = piece.points
+                    .map((pt) => `${pt.x},${pt.y}`)
+                    .join(" ");
+                  return (
+                    <polygon
+                      key={idx}
+                      points={pointsStr}
+                      fill="none"
+                      stroke="rgba(255,255,255,0.25)"
+                      strokeWidth="0.5"
+                      className="transition-all duration-300"
+                    />
+                  );
+                })}
+              </svg>
+            </div>
+
+            <div className="flex gap-2 mt-4 justify-center">
+              <button
+                onClick={() => {
+                  setThemeImageRevealed(!themeImageRevealed);
+                  setShowAnswer(true);
+                }}
+                className="bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-black px-4 py-2.5 rounded-xl"
+              >
+                🖼 Mở Toàn Bộ
+              </button>
+              <button
+                onClick={() => {
+                  setShowAnswer(true);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white text-xs font-black px-4 py-2.5 rounded-xl"
+              >
+                📢 Hiện Đáp Án
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </RoundLayout>
+  );
+}
