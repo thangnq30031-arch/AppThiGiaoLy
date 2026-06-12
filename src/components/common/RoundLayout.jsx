@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 
 export default function RoundLayout({
   roundLabel,
@@ -8,37 +9,42 @@ export default function RoundLayout({
   rulesContent,
   children,
 }) {
-  const [isRulesOpen, setIsRulesOpen] = useState(false);
+  const [isRulesOpen, setIsRulesOpen] = useState(true);
+
+  // Rules overlay rendered via portal so it's not affected by parent transforms
+  const rulesOverlay = isRulesOpen ? (
+    <div className="fixed inset-0 z-50 bg-black/95 text-white p-6 flex items-center justify-center">
+      <div className="relative w-full h-full max-w-6xl rounded-3xl overflow-hidden border border-white/10 bg-slate-950 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-white/10 p-5">
+          <div className="flex justify-center w-full">
+            <h2 className="text-xl font-black">THỂ LỆ VÒNG: {roundTitle}</h2>
+            {subtitle && (
+              <p className="text-sm text-purple-300 mt-1">{subtitle}</p>
+            )}
+          </div>
+          <button
+            onClick={() => setIsRulesOpen(false)}
+            className="text-2xl text-white hover:text-yellow-300"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="h-[calc(100%-80px)] overflow-y-auto p-6 text-2xl text-slate-200">
+          {typeof rulesContent === "string" ? (
+            <div className="whitespace-pre-line">{rulesContent}</div>
+          ) : (
+            rulesContent
+          )}
+        </div>
+      </div>
+    </div>
+  ) : null;
 
   return (
     <div className="h-full relative">
-      {isRulesOpen && (
-        <div className="fixed inset-0 z-50 bg-black/95 text-white p-6 flex items-center justify-center">
-          <div className="relative w-full h-full max-w-6xl rounded-3xl overflow-hidden border border-white/10 bg-slate-950 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 p-5">
-              <div>
-                <h2 className="text-xl font-black">Thể lệ vòng thi</h2>
-                {subtitle && (
-                  <p className="text-sm text-purple-300 mt-1">{subtitle}</p>
-                )}
-              </div>
-              <button
-                onClick={() => setIsRulesOpen(false)}
-                className="text-2xl text-white hover:text-yellow-300"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="h-[calc(100%-80px)] overflow-y-auto p-6 text-sm leading-7 text-slate-200">
-              {typeof rulesContent === "string" ? (
-                <div className="whitespace-pre-line">{rulesContent}</div>
-              ) : (
-                rulesContent
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      {typeof document !== "undefined" && rulesOverlay
+        ? createPortal(rulesOverlay, document.body)
+        : rulesOverlay}
 
       <div className="h-full flex flex-col items-center p-6">
         <div className="h-full w-full flex flex-col">

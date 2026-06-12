@@ -6,11 +6,11 @@ import useSpacebarStart from "../hooks/useSpacebarStart.js";
 export default function Round3Question({
   db,
   selectedPuzzleQ,
-  showAnswer,
+  showQuestionAnswer,
+  setShowQuestionAnswer,
   timer,
   isTimerRunning,
   triggerCountdown,
-  setShowAnswer,
   revealSinglePiece,
   setActiveTab,
 }) {
@@ -110,22 +110,28 @@ export default function Round3Question({
               const isCorrect =
                 db.round3.questions[selectedPuzzleQ]?.correct === letter;
               const isSelected = selectedAnswer === letter;
+              const reveal = !!showQuestionAnswer;
+              const disabledOption = reveal || isAnswerCorrect;
+
+              let optionClass = "bg-white/5 hover:bg-white/10 cursor-pointer";
+              if (reveal) {
+                optionClass = isCorrect
+                  ? "bg-green-600"
+                  : "bg-white/5 opacity-50";
+              } else if (isAnswerCorrect) {
+                optionClass = isCorrect
+                  ? "bg-green-600"
+                  : "bg-white/5 opacity-50";
+              } else if (isSelected) {
+                optionClass = isCorrect ? "bg-green-600" : "bg-red-600";
+              }
+
               return (
                 <button
                   key={letter}
                   onClick={() => setSelectedAnswer(letter)}
-                  disabled={isAnswerCorrect}
-                  className={`p-6 md:p-8 rounded-3xl text-left flex items-center justify-between gap-4 transition-all ${
-                    isAnswerCorrect
-                      ? isCorrect
-                        ? "bg-green-600"
-                        : "bg-white/5 opacity-50"
-                      : isSelected
-                        ? isCorrect
-                          ? "bg-green-600"
-                          : "bg-red-600"
-                        : "bg-white/5 hover:bg-white/10 cursor-pointer"
-                  }`}
+                  disabled={disabledOption}
+                  className={`p-6 md:p-8 rounded-3xl text-left flex items-center justify-between gap-4 transition-all ${optionClass}`}
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="flex">
@@ -138,12 +144,18 @@ export default function Round3Question({
                       </span>
                     </div>
                   </div>
-                  {isSelected && isCorrect && (
+                  {/* Badge */}
+                  {reveal && isCorrect && (
                     <span className="bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-full whitespace-nowrap">
                       ✓ ĐÚNG
                     </span>
                   )}
-                  {isSelected && !isCorrect && (
+                  {!reveal && isSelected && isCorrect && (
+                    <span className="bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-full whitespace-nowrap">
+                      ✓ ĐÚNG
+                    </span>
+                  )}
+                  {!reveal && isSelected && !isCorrect && (
                     <span className="bg-red-400 text-black text-xs font-black px-3 py-1 rounded-full whitespace-nowrap">
                       ✗ SAI
                     </span>
@@ -155,7 +167,7 @@ export default function Round3Question({
         ) : (
           <div className="bg-black/40 rounded-2xl p-8 mt-6 w-full text-center border border-white/5">
             <div className="text-3xl md:text-4xl font-black text-yellow-400">
-              {showAnswer
+              {showQuestionAnswer
                 ? db.round3.questions[selectedPuzzleQ]?.correct
                 : "🔒 Đáp án ẩn"}
             </div>
@@ -164,15 +176,8 @@ export default function Round3Question({
 
         <div className="flex gap-4 mt-10 w-full justify-center flex-wrap">
           <button
-            onClick={triggerCountdown}
-            disabled={isTimerRunning}
-            className="bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-700 text-black font-black px-6 py-3 rounded-xl text-sm"
-          >
-            ⏰ Bắt Đầu 10s
-          </button>
-          <button
             onClick={() => {
-              setShowAnswer(true);
+              setShowQuestionAnswer(true);
             }}
             className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-xl text-sm"
           >
@@ -180,19 +185,22 @@ export default function Round3Question({
           </button>
           <button
             onClick={() => {
-              if (isAnswerCorrect) {
-                revealSinglePiece(selectedPuzzleQ);
-                setActiveTab("round3");
-              }
+              revealSinglePiece(selectedPuzzleQ);
+              setShowQuestionAnswer(false);
+              setActiveTab("round3");
             }}
-            disabled={!isAnswerCorrect}
-            className={`font-bold px-6 py-3 rounded-xl text-sm transition-all ${
-              isAnswerCorrect
-                ? "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
-                : "bg-gray-700 text-gray-400 cursor-not-allowed"
-            }`}
+            className={`font-bold px-6 py-3 rounded-xl text-sm transition-all bg-purple-600 hover:bg-purple-700 text-white cursor-pointer`}
           >
             🔓 Mở Mảnh Này
+          </button>
+          <button
+            onClick={() => {
+              setShowQuestionAnswer(false);
+              setActiveTab("round3");
+            }}
+            className={`font-bold px-6 py-3 rounded-xl text-sm transition-all bg-red-600 hover:bg-red-700 text-white cursor-pointer`}
+          >
+            Quay Lại
           </button>
         </div>
       </div>

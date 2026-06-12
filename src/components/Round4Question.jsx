@@ -5,6 +5,7 @@ export default function Round4Question({
   db,
   selectedVòng4Question,
   setSelectedVòng4Question,
+  onBackToTopics,
   starOfHope,
   toggleStarOfHope,
   triggerCountdown,
@@ -34,7 +35,12 @@ export default function Round4Question({
             </span>
           </div>
           <button
-            onClick={() => setSelectedVòng4Question(null)}
+            title="Quay lại màn hình chọn chủ đề"
+            aria-label="Quay lại màn hình chọn chủ đề"
+            onClick={() => {
+              if (onBackToTopics) onBackToTopics();
+              else setSelectedVòng4Question(null);
+            }}
             className="text-xs text-red-400 hover:text-red-300 font-bold"
           >
             Quay Lại

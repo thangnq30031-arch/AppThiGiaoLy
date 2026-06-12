@@ -115,98 +115,146 @@ const defaultDatabase = {
   round4: {
     categories: [
       {
-        id: "science",
-        title: "KHOA HỌC TỰ NHIÊN",
+        id: "thanh_kinh",
+        title: "THÁNH KINH",
         questions: {
-          10: {
-            question: "Đơn vị đo cường độ dòng điện là gì?",
-            type: "open",
-            correct: "Ampe (A)",
-            mediaType: "image",
-            mediaUrl: "60x90.jpg",
-          },
-          20: {
-            question: "Hiện tượng phản xạ ánh sáng tuân theo định luật nào?",
-            type: "abcd",
-            options: [
-              "Định luật khúc xạ",
-              "Định luật phản xạ ánh sáng",
-              "Định luật hấp dẫn",
-              "Định luật Coulomb",
-            ],
-            correct: "B",
-          },
-          30: {
-            question:
-              "Axit nào có sẵn trong dạ dày con người giúp tiêu hóa thức ăn?",
-            type: "open",
-            correct: "Axit Clohiđric (HCl)",
-          },
+          10: [
+            {
+              question: "Sách Tin Mừng nào đứng đầu Tân Ước?",
+              type: "open",
+              correct: "Phúc Âm Matthew",
+            },
+            {
+              question: "Sách Tin Mừng nào đứng đầu Tân Ước?",
+              type: "open",
+              correct: "Phúc Âm Matthew",
+            },
+          ],
+          20: [
+            {
+              question: "Ai là người viết Sách Sáng Thế?",
+              type: "open",
+              correct: "Truyền thống cho là Môi-se",
+            },
+          ],
+          30: [
+            {
+              question: "Số lượng sách trong Cựu Ước là bao nhiêu?",
+              type: "open",
+              correct: "39",
+            },
+          ],
         },
       },
       {
-        id: "history",
-        title: "LỊCH SỬ - ĐỊA LÝ",
+        id: "phung_vu",
+        title: "PHỤNG VỤ",
         questions: {
-          10: {
-            question: "Dòng sông nào dài nhất thế giới?",
-            type: "abcd",
-            options: [
-              "Sông Amazon",
-              "Sông Nile",
-              "Sông Mê Kông",
-              "Sông Trường Giang",
-            ],
-            correct: "B",
-          },
-          20: {
-            question:
-              "Chiến dịch Điện Biên Phủ lịch sử kết thúc thắng lợi vào ngày tháng năm nào?",
-            type: "open",
-            correct: "07/05/1954",
-          },
-          30: {
-            question:
-              "Đỉnh núi nào được mệnh danh là 'Nóc nhà của Đông Dương'?",
-            type: "abcd",
-            options: [
-              "Đỉnh Fansipan",
-              "Đỉnh Everest",
-              "Đỉnh Phú Sĩ",
-              "Đỉnh Langbiang",
-            ],
-            correct: "A",
-          },
+          10: [
+            {
+              question: "Lễ Phục Sinh truyền cảm hứng cho sự kiện nào?",
+              type: "open",
+              correct: "Phục sinh của Chúa Giê-su",
+            },
+          ],
+          20: [
+            {
+              question: "Nghi thức Rửa Tội thuộc loại nào trong các Bí Tích?",
+              type: "open",
+              correct: "Bí tích khai tâm",
+            },
+          ],
+          30: [
+            {
+              question: "Thời gian Mùa Chay kéo dài bao nhiêu ngày?",
+              type: "abcd",
+              options: ["40 ngày", "30 ngày", "50 ngày", "7 ngày"],
+              correct: "A",
+            },
+          ],
         },
       },
       {
-        id: "arts",
-        title: "VĂN HỌC - NGHỆ THUẬT",
+        id: "giao_ly",
+        title: "GIÁO LÝ",
         questions: {
-          10: {
-            question:
-              "Ai là họa sĩ vẽ bức tranh nàng Mona Lisa nổi tiếng thế giới?",
-            type: "open",
-            correct: "Leonardo da Vinci",
-          },
-          20: {
-            question:
-              "Nhà thơ được mệnh danh là 'Bà chúa thơ Nôm' nước ta là ai?",
-            type: "abcd",
-            options: [
-              "Hồ Xuân Hương",
-              "Đoàn Thị Điểm",
-              "Bà Huyện Thanh Quan",
-              "Xuân Quỳnh",
-            ],
-            correct: "A",
-          },
-          30: {
-            question:
-              "Tác phẩm văn học nào đạt giải Nobel của nhà văn Ernest Hemingway?",
-            type: "open",
-            correct: "Ông già và biển cả",
-          },
+          10: [
+            {
+              question: "Tín điều nào là nền tảng của đức tin Kitô giáo?",
+              type: "open",
+              correct: "Đức tin vào Ba Ngôi",
+            },
+          ],
+          20: [
+            {
+              question: "Giáo lý Công giáo hướng dẫn người tín hữu làm gì?",
+              type: "open",
+              correct: "Sống theo lời Chúa",
+            },
+          ],
+          30: [
+            {
+              question: "Giáo lý bao gồm bao nhiêu phần chính?",
+              type: "abcd",
+              options: ["3", "4", "5", "6"],
+              correct: "A",
+            },
+          ],
+        },
+      },
+      {
+        id: "tntt",
+        title: "PHONG TRÀO TNTT",
+        questions: {
+          10: [
+            {
+              question: "TNTT là viết tắt của gì?",
+              type: "open",
+              correct: "Thiếu Nhi Thánh Thể",
+            },
+          ],
+          20: [
+            {
+              question: "Hoạt động sinh hoạt chính của TNTT thường là gì?",
+              type: "open",
+              correct: "Cầu nguyện và sinh hoạt cộng đồng",
+            },
+          ],
+          30: [
+            {
+              question: "Chữ ký hiệu truyền thống của TNTT là biểu tượng nào?",
+              type: "open",
+              correct: "Ngôi sao hoặc hình trái tim",
+            },
+          ],
+        },
+      },
+      {
+        id: "giao_hoi",
+        title: "GIÁO HỘI",
+        questions: {
+          10: [
+            {
+              question: "Giáo hội được thành lập bởi ai?",
+              type: "open",
+              correct: "Chúa Giê-su Kitô",
+            },
+          ],
+          20: [
+            {
+              question: "Thánh lễ thường diễn ra vào ngày nào trong tuần?",
+              type: "abcd",
+              options: ["Chủ Nhật", "Thứ Hai", "Thứ Sáu", "Thứ Bảy"],
+              correct: "A",
+            },
+          ],
+          30: [
+            {
+              question: "Thánh Phêrô được coi là người giữ vai trò gì?",
+              type: "open",
+              correct: "Tông đồ, vị thủ lĩnh sớm của Giáo hội",
+            },
+          ],
         },
       },
     ],
@@ -239,6 +287,10 @@ export default function App() {
   const [themeImageRevealed, setThemeImageRevealed] = useState(false);
   const [selectedPuzzleQ, setSelectedPuzzleQ] = useState(null);
   const [puzzleAnswersStatus, setPuzzleAnswersStatus] = useState({});
+  const [round3ThemeAnswerVisible, setRound3ThemeAnswerVisible] =
+    useState(false);
+  const [round3QuestionAnswerVisible, setRound3QuestionAnswerVisible] =
+    useState(false);
 
   // Vòng 4
   const [starOfHope, setStarOfHope] = useState(false);
@@ -363,6 +415,8 @@ export default function App() {
     setThemeImageRevealed(false);
     setSelectedPuzzleQ(null);
     setPuzzleAnswersStatus({});
+    setRound3ThemeAnswerVisible(false);
+    setRound3QuestionAnswerVisible(false);
 
     if (db.round3?.cols && db.round3?.rows) {
       const pieces = generatePuzzlePieces(db.round3.cols, db.round3.rows);
@@ -399,13 +453,13 @@ export default function App() {
     setActiveTab("round4");
   };
 
-  const selectVòng4Question = (categoryId, points, questionData) => {
-    const key = `${categoryId}-${points}`;
+  const selectVòng4Question = (categoryId, points, index, questionData) => {
+    const key = `${categoryId}-${points}-${index}`;
     if (answeredVòng4Questions[key]) {
       triggerToast("Câu hỏi này đã được chọn trước đó!");
       return;
     }
-    setSelectedVòng4Question({ categoryId, points, questionData });
+    setSelectedVòng4Question({ categoryId, points, index, questionData });
     setShowAnswer(false);
     setStarOfHope(false);
     setTimer(10);
@@ -429,7 +483,7 @@ export default function App() {
 
   const finishVòng4Question = () => {
     if (selectedVòng4Question) {
-      const key = `${selectedVòng4Question.categoryId}-${selectedVòng4Question.points}`;
+      const key = `${selectedVòng4Question.categoryId}-${selectedVòng4Question.points}-${selectedVòng4Question.index}`;
       setAnsweredVòng4Questions((prev) => ({ ...prev, [key]: true }));
       setSelectedVòng4Question(null);
       setStarOfHope(false);
@@ -675,8 +729,9 @@ export default function App() {
               stopCountdown={stopCountdown}
               timer={timer}
               isTimerRunning={isTimerRunning}
-              showAnswer={showAnswer}
-              setShowAnswer={setShowAnswer}
+              round3ThemeAnswerVisible={round3ThemeAnswerVisible}
+              setRound3ThemeAnswerVisible={setRound3ThemeAnswerVisible}
+              setRound3QuestionAnswerVisible={setRound3QuestionAnswerVisible}
               setThemeImageRevealed={setThemeImageRevealed}
               triggerToast={triggerToast}
               setActiveTab={setActiveTab}
@@ -687,11 +742,11 @@ export default function App() {
             <Round3Question
               db={db}
               selectedPuzzleQ={selectedPuzzleQ}
-              showAnswer={showAnswer}
+              showQuestionAnswer={round3QuestionAnswerVisible}
+              setShowQuestionAnswer={setRound3QuestionAnswerVisible}
               timer={timer}
               isTimerRunning={isTimerRunning}
               triggerCountdown={triggerVòng3Countdown}
-              setShowAnswer={setShowAnswer}
               revealSinglePiece={revealSinglePiece}
               setActiveTab={setActiveTab}
             />
@@ -702,6 +757,8 @@ export default function App() {
               db={db}
               selectedVòng4Question={selectedVòng4Question}
               setSelectedVòng4Question={setSelectedVòng4Question}
+              selectVòng4Question={selectVòng4Question}
+              answeredVòng4Questions={answeredVòng4Questions}
               starOfHope={starOfHope}
               toggleStarOfHope={toggleStarOfHope}
               triggerCountdown={triggerVòng4Countdown}
