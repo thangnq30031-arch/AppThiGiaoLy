@@ -13,7 +13,7 @@ export default function RoundLayout({
 
   // Rules overlay rendered via portal so it's not affected by parent transforms
   const rulesOverlay = isRulesOpen ? (
-    <div className="fixed inset-0 z-50 bg-black/95 text-white p-6 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 bg-black/70 text-white p-6 flex items-center justify-center">
       <div className="relative w-full h-full max-w-6xl rounded-3xl overflow-hidden border border-white/10 bg-slate-950 shadow-2xl">
         <div className="flex items-center justify-between border-b border-white/10 p-5">
           <div className="flex justify-center w-full">

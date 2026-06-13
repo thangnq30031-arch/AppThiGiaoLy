@@ -133,10 +133,10 @@ export default function Round1({
                 className="bg-gradient-to-r from-indigo-900 to-purple-900 p-6 md:p-8 rounded-3xl text-left flex items-center gap-5 shadow-xl"
               >
                 <div className="flex">
-                  <span className="text-lg md:text-xl font-extrabold">
+                  <span className="text-2xl md:text-3xl font-extrabold">
                     {letter}.&nbsp;
                   </span>
-                  <span className="text-lg md:text-xl font-extrabold">
+                  <span className="text-2xl md:text-3xl font-extrabold">
                     {q.options[idx] || ""}
                   </span>
                 </div>

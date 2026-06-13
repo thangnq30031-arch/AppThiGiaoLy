@@ -35,19 +35,11 @@ export default function Round3({
       rulesContent={rulesContent}
     >
       <div className="h-full w-full flex flex-col">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <span className="text-sm font-semibold text-purple-300">
-              Chọn một mảnh để mở câu hỏi.
-            </span>
-          </div>
-        </div>
-
         <div className="flex-1 min-h-0 flex flex-col items-center justify-center">
           <div className="w-full h-full flex flex-col items-center justify-center">
-            <h4 className="text-sm text-purple-300 font-bold uppercase tracking-wider mb-3">
-              Sơ đồ tinh thể
-            </h4>
+            <div className="text-2xl font-black mb-4">
+              {db.round3.themeQuestion}
+            </div>
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/20 shadow-2xl max-w-[900px] bg-slate-950">
               <img
                 src={resolveImageUrl(db.round3.themeImage)}
@@ -142,11 +134,7 @@ export default function Round3({
             {/* Theme question/answer frame */}
             <div className="mt-4 w-full max-w-[900px]">
               <div className="bg-black/40 rounded-2xl p-4 border border-white/5">
-                <div className="text-sm text-purple-300 font-semibold mb-2">
-                  db.round3.themeQuestion
-                </div>
-                <div className="text-lg font-black">Đoán chủ đề bức tranh</div>
-                <div className="mt-3 text-2xl font-extrabold text-yellow-400">
+                <div className="mt-3 text-2xl font-extrabold text-yellow-400 text-center">
                   {round3ThemeAnswerVisible
                     ? db.round3.themeAnswer
                     : "🔒 Đáp án ẩn"}

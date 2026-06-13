@@ -3,13 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg: linear-gradient(to-br, #0f172a, #1e293b);
+    --bg-color: #0f172a;
+    --surface: rgba(255,255,255,0.06);
+    --primary: #ffde59;
+    --secondary: #ff6fb5;
+    --text-color: #ffffff;
+    --accent: #7c3aed;
+    --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  }
+
   html, body, #root {
     height: 100%;
   }
 
   body {
-    @apply min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 text-white antialiased;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    @apply min-h-screen antialiased;
+    background: var(--bg);
+    color: var(--text-color);
+    font-family: var(--font-family);
   }
 }
 

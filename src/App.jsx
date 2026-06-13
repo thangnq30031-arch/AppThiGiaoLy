@@ -8,6 +8,9 @@ import Round2 from "./components/Round2.jsx";
 import Round3 from "./components/Round3.jsx";
 import Round3Question from "./components/Round3Question.jsx";
 import Round4 from "./components/Round4.jsx";
+import ThemeProvider from "./theme/ThemeProvider";
+import ThemeSwitcher from "./components/common/ThemeSwitcher.jsx";
+import ThemeSettings from "./components/common/ThemeSettings.jsx";
 
 // --- DỮ LIỆU CÂU HỎI MẪU MẶC ĐỊNH ---
 const defaultDatabase = {
@@ -684,312 +687,324 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 text-white">
-      {toastMsg && (
-        <div className="fixed top-5 right-5 z-50 bg-yellow-500 text-black px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center gap-2 animate-bounce">
-          <span>🌟</span> {toastMsg}
-        </div>
-      )}
-
-      <header className="bg-black/40 backdrop-blur-md border-b border-white/10 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div
-          className="flex items-center gap-3 cursor-pointer"
-          onClick={() => setActiveTab("welcome")}
-        >
-          <div className="bg-yellow-500 text-slate-950 font-black text-2xl px-3 py-1 rounded-xl shadow-lg shadow-yellow-500/30">
-            O!
-          </div>
-          <div>
-            <h1 className="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-300">
-              ĐƯỜNG LÊN NÚI SINAI
-            </h1>
-            <p className="text-[10px] uppercase text-purple-300 font-bold tracking-widest">
-              Hệ Thống Đố Vui Kinh Thánh
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setActiveTab("welcome")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === "welcome" ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/20" : "bg-white/5 hover:bg-white/10"}`}
-          >
-            🏠 Trang Chủ
-          </button>
-          <button
-            onClick={() => setActiveTab("admin")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === "admin" ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/20" : "bg-white/5 hover:bg-white/10"}`}
-          >
-            ⚙️ Quản Lý Câu Hỏi
-          </button>
-        </div>
-      </header>
-
-      <main
-        className="flex-1 overflow-hidden min-h-0"
-        style={{ height: "calc(100vh - 80px)" }}
+    <ThemeProvider>
+      <div
+        className="min-h-screen flex flex-col"
+        style={{ fontFamily: "var(--font-family)" }}
       >
-        <div
-          ref={contentWrapperRef}
-          className="h-full w-full transition-transform duration-200 origin-top"
-          style={{ transform: `scale(${contentScale})` }}
-        >
-          {activeTab === "welcome" && (
-            <div className="py-12 text-center max-w-4xl mx-auto">
-              <h2 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-yellow-400 to-amber-300 tracking-tight leading-tight">
+        {toastMsg && (
+          <div className="fixed top-5 right-5 z-50 bg-yellow-500 text-black px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center gap-2 animate-bounce">
+            <span>🌟</span> {toastMsg}
+          </div>
+        )}
+
+        <header className="bg-black/40 backdrop-blur-md border-b border-white/10 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => setActiveTab("welcome")}
+          >
+            <div className="bg-yellow-500 text-slate-950 font-black text-2xl px-3 py-1 rounded-xl shadow-lg shadow-yellow-500/30">
+              O!
+            </div>
+            <div>
+              <h1 className="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-300">
                 ĐƯỜNG LÊN NÚI SINAI
-              </h2>
-              <p className="mt-4 text-purple-300 text-lg max-w-2xl mx-auto font-medium">
-                Chào mừng bạn đến với hệ thống trình chiếu thi đấu ngoại tuyến
-                thông minh. Trải nghiệm kịch tính qua 4 vòng thi đầy thử thách!
+              </h1>
+              <p className="text-[10px] uppercase text-purple-300 font-bold tracking-widest">
+                Hệ Thống Đố Vui Kinh Thánh
               </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
-                <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
-                  <div>
-                    <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                      ⚡
-                    </div>
-                    <h3 className="text-lg font-black text-yellow-400">
-                      VÒNG 1: SƠ LOẠI
-                    </h3>
-                    <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                      Đếm ngược 10 giây tự động đổi câu. Không hiển thị kết quả
-                      đúng để học sinh làm bài trên giấy kiểm tra.
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleStartVòng1}
-                    className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
-                  >
-                    BẮT ĐẦU VÒNG 1
-                  </button>
-                </div>
-
-                <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
-                  <div>
-                    <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                      🚀
-                    </div>
-                    <h3 className="text-lg font-black text-yellow-400">
-                      VÒNG 2: TĂNG TỐC
-                    </h3>
-                    <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                      Hỗ trợ trắc nghiệm hoặc đáp án tự luận. Có nút kích hoạt
-                      10 giây và nút hiện đáp án đúng để quản trò phân phối
-                      điểm.
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleStartVòng2}
-                    className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
-                  >
-                    BẮT ĐẦU VÒNG 2
-                  </button>
-                </div>
-
-                <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
-                  <div>
-                    <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                      🧩
-                    </div>
-                    <h3 className="text-lg font-black text-yellow-400">
-                      VÒNG 3: MẢNH GHÉP
-                    </h3>
-                    <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                      Tranh chủ đề bị che mờ bởi các mảnh ghép đa giác ngẫu
-                      nhiên. Trả lời đúng để lật mở từng mảnh ghép độc đáo.
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleStartVòng3}
-                    className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
-                  >
-                    BẮT ĐẦU VÒNG 3
-                  </button>
-                </div>
-
-                <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
-                  <div>
-                    <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                      👑
-                    </div>
-                    <h3 className="text-lg font-black text-yellow-400">
-                      VÒNG 4: VỀ ĐÍCH
-                    </h3>
-                    <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                      Bản đồ câu hỏi phân loại theo chủ đề và mức điểm (10, 20,
-                      30 điểm). Có tính năng kích hoạt "Ngôi Sao Hy Vọng" thần
-                      thánh!
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleStartVòng4}
-                    className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
-                  >
-                    BẮT ĐẦU VÒNG 4
-                  </button>
-                </div>
-              </div>
             </div>
-          )}
+          </div>
 
-          {activeTab === "round1" && (
-            <Round1
-              db={db}
-              currentQIndex={currentQIndex}
-              setCurrentQIndex={setCurrentQIndex}
-              timer={timer}
-              isTimerRunning={isTimerRunning}
-              triggerCountdown={triggerVòng1Countdown}
-              stopCountdown={stopCountdown}
-              setActiveTab={setActiveTab}
-              triggerToast={triggerToast}
-            />
-          )}
+          <div className="flex flex-wrap gap-2 items-center">
+            <button
+              onClick={() => setActiveTab("welcome")}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === "welcome" ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/20" : "bg-white/5 hover:bg-white/10"}`}
+            >
+              🏠 Trang Chủ
+            </button>
+            <button
+              onClick={() => setActiveTab("admin")}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === "admin" ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/20" : "bg-white/5 hover:bg-white/10"}`}
+            >
+              ⚙️ Quản Lý Câu Hỏi
+            </button>
+            <div className="ml-2 flex items-center gap-2">
+              <ThemeSwitcher />
+              <ThemeSettings />
+            </div>
+          </div>
+        </header>
 
-          {activeTab === "round2" && (
-            <Round2
-              db={db}
-              currentQIndex={currentQIndex}
-              setCurrentQIndex={setCurrentQIndex}
-              timer={timer}
-              isTimerRunning={isTimerRunning}
-              triggerCountdown={triggerVòng2Countdown}
-              stopCountdown={stopCountdown}
-              showAnswer={showAnswer}
-              setShowAnswer={setShowAnswer}
-              sound={sound}
-              triggerToast={triggerToast}
-              setActiveTab={setActiveTab}
-            />
-          )}
+        <main
+          className="flex-1 overflow-hidden min-h-0"
+          style={{ height: "calc(100vh - 80px)" }}
+        >
+          <div
+            ref={contentWrapperRef}
+            className="h-full w-full transition-transform duration-200 origin-top"
+            style={{ transform: `scale(${contentScale})` }}
+          >
+            {activeTab === "welcome" && (
+              <div className="py-12 text-center max-w-4xl mx-auto">
+                <h2 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-yellow-400 to-amber-300 tracking-tight leading-tight">
+                  ĐƯỜNG LÊN NÚI SINAI
+                </h2>
+                <p className="mt-4 text-purple-300 text-lg max-w-2xl mx-auto font-medium">
+                  Chào mừng bạn đến với hệ thống trình chiếu thi đấu ngoại tuyến
+                  thông minh. Trải nghiệm kịch tính qua 4 vòng thi đầy thử
+                  thách!
+                </p>
 
-          {activeTab === "round3" && (
-            <Round3
-              db={db}
-              puzzlePieces={puzzlePieces}
-              revealedPieces={revealedPieces}
-              puzzleAnswersStatus={puzzleAnswersStatus}
-              themeImageRevealed={themeImageRevealed}
-              selectedPuzzleQ={selectedPuzzleQ}
-              setSelectedPuzzleQ={setSelectedPuzzleQ}
-              revealSinglePiece={revealSinglePiece}
-              triggerCountdown={triggerVòng3Countdown}
-              stopCountdown={stopCountdown}
-              timer={timer}
-              isTimerRunning={isTimerRunning}
-              round3ThemeAnswerVisible={round3ThemeAnswerVisible}
-              setRound3ThemeAnswerVisible={setRound3ThemeAnswerVisible}
-              setRound3QuestionAnswerVisible={setRound3QuestionAnswerVisible}
-              setThemeImageRevealed={setThemeImageRevealed}
-              triggerToast={triggerToast}
-              setActiveTab={setActiveTab}
-            />
-          )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                  <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
+                    <div>
+                      <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
+                        ⚡
+                      </div>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        VÒNG 1: SƠ LOẠI
+                      </h3>
+                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
+                        Đếm ngược 10 giây tự động đổi câu. Không hiển thị kết
+                        quả đúng để học sinh làm bài trên giấy kiểm tra.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleStartVòng1}
+                      className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
+                    >
+                      BẮT ĐẦU VÒNG 1
+                    </button>
+                  </div>
 
-          {activeTab === "round3-question" && selectedPuzzleQ !== null && (
-            <Round3Question
-              db={db}
-              selectedPuzzleQ={selectedPuzzleQ}
-              showQuestionAnswer={round3QuestionAnswerVisible}
-              setShowQuestionAnswer={setRound3QuestionAnswerVisible}
-              timer={timer}
-              isTimerRunning={isTimerRunning}
-              triggerCountdown={triggerVòng3Countdown}
-              revealSinglePiece={revealSinglePiece}
-              setActiveTab={setActiveTab}
-            />
-          )}
+                  <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
+                    <div>
+                      <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
+                        🚀
+                      </div>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        VÒNG 2: TĂNG TỐC
+                      </h3>
+                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
+                        Hỗ trợ trắc nghiệm hoặc đáp án tự luận. Có nút kích hoạt
+                        10 giây và nút hiện đáp án đúng để quản trò phân phối
+                        điểm.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleStartVòng2}
+                      className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
+                    >
+                      BẮT ĐẦU VÒNG 2
+                    </button>
+                  </div>
 
-          {activeTab === "round4" && (
-            <Round4
-              db={db}
-              selectedVòng4Question={selectedVòng4Question}
-              setSelectedVòng4Question={setSelectedVòng4Question}
-              selectVòng4Question={selectVòng4Question}
-              answeredVòng4Questions={answeredVòng4Questions}
-              starOfHope={starOfHope}
-              toggleStarOfHope={toggleStarOfHope}
-              triggerCountdown={triggerVòng4Countdown}
-              isTimerRunning={isTimerRunning}
-              timer={timer}
-              finishVòng4Question={finishVòng4Question}
-              showAnswer={showAnswer}
-              setShowAnswer={setShowAnswer}
-              setActiveTab={setActiveTab}
-              triggerToast={triggerToast}
-            />
-          )}
+                  <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
+                    <div>
+                      <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
+                        🧩
+                      </div>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        VÒNG 3: MẢNH GHÉP
+                      </h3>
+                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
+                        Tranh chủ đề bị che mờ bởi các mảnh ghép đa giác ngẫu
+                        nhiên. Trả lời đúng để lật mở từng mảnh ghép độc đáo.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleStartVòng3}
+                      className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
+                    >
+                      BẮT ĐẦU VÒNG 3
+                    </button>
+                  </div>
 
-          {activeTab === "admin" && (
-            <div className="max-w-5xl mx-auto bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl">
-              <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
-                <div>
-                  <span className="bg-yellow-500 text-black font-black text-xs px-3 py-1 rounded-full uppercase">
-                    Quản Trị
-                  </span>
-                  <h3 className="text-2xl font-black mt-1">QUẢN LÝ CÂU HỎI</h3>
-                </div>
-                <button
-                  onClick={() => setActiveTab("welcome")}
-                  className="text-xs text-red-400 hover:text-red-300 font-bold"
-                >
-                  Thoát
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div>
-                  <h5 className="font-bold text-yellow-400 text-sm mb-2">
-                    💾 Lưu Trữ Offline
-                  </h5>
-                  <button
-                    onClick={handleResetDefault}
-                    className="w-full bg-red-100 text-red-700 font-bold text-xs py-2 px-3 rounded-xl"
-                  >
-                    🔄 Khôi phục mẫu
-                  </button>
-                </div>
-                <div>
-                  <h5 className="font-bold text-yellow-400 text-sm mb-2">
-                    📤 Xuất
-                  </h5>
-                  <button
-                    onClick={exportDatabase}
-                    className="w-full bg-blue-600 text-white font-bold text-xs py-2 px-3 rounded-xl"
-                  >
-                    📥 Xuất FILE JSON
-                  </button>
-                </div>
-                <div>
-                  <h5 className="font-bold text-yellow-400 text-sm mb-2">
-                    📥 Nhập
-                  </h5>
-                  <div className="flex flex-col gap-2">
-                    <input
-                      type="file"
-                      accept=".xlsx,.xls"
-                      onChange={handleImportExcel}
-                      className="w-full"
-                    />
+                  <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
+                    <div>
+                      <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
+                        👑
+                      </div>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        VÒNG 4: VỀ ĐÍCH
+                      </h3>
+                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
+                        Bản đồ câu hỏi phân loại theo chủ đề và mức điểm (10,
+                        20, 30 điểm). Có tính năng kích hoạt "Ngôi Sao Hy Vọng"
+                        thần thánh!
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleStartVòng4}
+                      className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-2xl text-sm transition-all shadow-md"
+                    >
+                      BẮT ĐẦU VÒNG 4
+                    </button>
                   </div>
                 </div>
               </div>
+            )}
 
-              <textarea
-                className="w-full h-72 bg-black/80 font-mono text-xs text-emerald-400 p-4 rounded-xl border border-white/10"
-                value={JSON.stringify(db, null, 2)}
-                onChange={(e) => {
-                  try {
-                    setDb(JSON.parse(e.target.value));
-                  } catch (err) {}
-                }}
+            {activeTab === "round1" && (
+              <Round1
+                db={db}
+                currentQIndex={currentQIndex}
+                setCurrentQIndex={setCurrentQIndex}
+                timer={timer}
+                isTimerRunning={isTimerRunning}
+                triggerCountdown={triggerVòng1Countdown}
+                stopCountdown={stopCountdown}
+                setActiveTab={setActiveTab}
+                triggerToast={triggerToast}
               />
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+            )}
+
+            {activeTab === "round2" && (
+              <Round2
+                db={db}
+                currentQIndex={currentQIndex}
+                setCurrentQIndex={setCurrentQIndex}
+                timer={timer}
+                isTimerRunning={isTimerRunning}
+                triggerCountdown={triggerVòng2Countdown}
+                stopCountdown={stopCountdown}
+                showAnswer={showAnswer}
+                setShowAnswer={setShowAnswer}
+                sound={sound}
+                triggerToast={triggerToast}
+                setActiveTab={setActiveTab}
+              />
+            )}
+
+            {activeTab === "round3" && (
+              <Round3
+                db={db}
+                puzzlePieces={puzzlePieces}
+                revealedPieces={revealedPieces}
+                puzzleAnswersStatus={puzzleAnswersStatus}
+                themeImageRevealed={themeImageRevealed}
+                selectedPuzzleQ={selectedPuzzleQ}
+                setSelectedPuzzleQ={setSelectedPuzzleQ}
+                revealSinglePiece={revealSinglePiece}
+                triggerCountdown={triggerVòng3Countdown}
+                stopCountdown={stopCountdown}
+                timer={timer}
+                isTimerRunning={isTimerRunning}
+                round3ThemeAnswerVisible={round3ThemeAnswerVisible}
+                setRound3ThemeAnswerVisible={setRound3ThemeAnswerVisible}
+                setRound3QuestionAnswerVisible={setRound3QuestionAnswerVisible}
+                setThemeImageRevealed={setThemeImageRevealed}
+                triggerToast={triggerToast}
+                setActiveTab={setActiveTab}
+              />
+            )}
+
+            {activeTab === "round3-question" && selectedPuzzleQ !== null && (
+              <Round3Question
+                db={db}
+                selectedPuzzleQ={selectedPuzzleQ}
+                showQuestionAnswer={round3QuestionAnswerVisible}
+                setShowQuestionAnswer={setRound3QuestionAnswerVisible}
+                timer={timer}
+                isTimerRunning={isTimerRunning}
+                triggerCountdown={triggerVòng3Countdown}
+                revealSinglePiece={revealSinglePiece}
+                setActiveTab={setActiveTab}
+              />
+            )}
+
+            {activeTab === "round4" && (
+              <Round4
+                db={db}
+                selectedVòng4Question={selectedVòng4Question}
+                setSelectedVòng4Question={setSelectedVòng4Question}
+                selectVòng4Question={selectVòng4Question}
+                answeredVòng4Questions={answeredVòng4Questions}
+                starOfHope={starOfHope}
+                toggleStarOfHope={toggleStarOfHope}
+                triggerCountdown={triggerVòng4Countdown}
+                isTimerRunning={isTimerRunning}
+                timer={timer}
+                finishVòng4Question={finishVòng4Question}
+                showAnswer={showAnswer}
+                setShowAnswer={setShowAnswer}
+                setActiveTab={setActiveTab}
+                triggerToast={triggerToast}
+              />
+            )}
+
+            {activeTab === "admin" && (
+              <div className="max-w-5xl mx-auto bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl">
+                <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
+                  <div>
+                    <span className="bg-yellow-500 text-black font-black text-xs px-3 py-1 rounded-full uppercase">
+                      Quản Trị
+                    </span>
+                    <h3 className="text-2xl font-black mt-1">
+                      QUẢN LÝ CÂU HỎI
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab("welcome")}
+                    className="text-xs text-red-400 hover:text-red-300 font-bold"
+                  >
+                    Thoát
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div>
+                    <h5 className="font-bold text-yellow-400 text-sm mb-2">
+                      💾 Lưu Trữ Offline
+                    </h5>
+                    <button
+                      onClick={handleResetDefault}
+                      className="w-full bg-red-100 text-red-700 font-bold text-xs py-2 px-3 rounded-xl"
+                    >
+                      🔄 Khôi phục mẫu
+                    </button>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-yellow-400 text-sm mb-2">
+                      📤 Xuất
+                    </h5>
+                    <button
+                      onClick={exportDatabase}
+                      className="w-full bg-blue-600 text-white font-bold text-xs py-2 px-3 rounded-xl"
+                    >
+                      📥 Xuất FILE JSON
+                    </button>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-yellow-400 text-sm mb-2">
+                      📥 Nhập
+                    </h5>
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="file"
+                        accept=".xlsx,.xls"
+                        onChange={handleImportExcel}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <textarea
+                  className="w-full h-72 bg-black/80 font-mono text-xs text-emerald-400 p-4 rounded-xl border border-white/10"
+                  value={JSON.stringify(db, null, 2)}
+                  onChange={(e) => {
+                    try {
+                      setDb(JSON.parse(e.target.value));
+                    } catch (err) {}
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
