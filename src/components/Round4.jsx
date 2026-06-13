@@ -46,20 +46,24 @@ export default function Round4({
                 tntt: "🎈",
                 giao_hoi: "🌐",
               };
+              const title = {
+                thanh_kinh: "THÁNH KINH",
+                phung_vu: "PHỤNG VỤ",
+                giao_ly: "GIÁO LÝ",
+                tntt: "THIẾU NHI THÁNH THỂ",
+                giao_hoi: "GIÁO HỘI",
+              };
               return (
                 <div
                   key={cat.id}
                   className="bg-black/30 rounded-2xl border border-white/10 p-5 flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => setActiveCategory(cat.id)}
                 >
-                  <div className="text-center border-b border-white/10 pb-3 mb-4">
-                    <div className="text-4xl mb-2">{icons[cat.id] || "❓"}</div>
-                    <h5 className="font-black text-base text-white">
-                      {cat.title}
-                    </h5>
-                  </div>
-                  <div className="text-sm text-slate-300">
-                    Chọn để xem danh sách câu hỏi
+                  <div className="text-center border-white/10 pb-3 mb-4">
+                    <div className="text-5xl mb-2">{icons[cat.id] || "❓"}</div>
+                    <h2 className="font-black text-base text-white">
+                      {title[cat.id]}
+                    </h2>
                   </div>
                 </div>
               );

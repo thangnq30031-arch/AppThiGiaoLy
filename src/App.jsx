@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import sound from "./lib/sound";
+import * as XLSX from "xlsx";
 import { generatePuzzlePieces } from "./utils/puzzle";
 import Round1 from "./components/Round1.jsx";
 import Round2 from "./components/Round2.jsx";
@@ -70,6 +71,7 @@ const defaultDatabase = {
   round3: {
     themeImage: "2025-07-05_131435.png",
     themeAnswer: "VŨ TRỤ & KHÔNG GIAN SỐ",
+    themeQuestion: "Đây là một phần của bức tranh chủ đề nào?",
     cols: 4,
     rows: 3,
     questions: [
@@ -526,6 +528,154 @@ export default function App() {
     reader.readAsText(file);
   };
 
+  const handleImportExcel = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+
+      const newDb = { ...db };
+
+      // Helper to parse option columns
+      const parseOptions = (row) => {
+        const opts = [];
+        Object.keys(row).forEach((k) => {
+          if (/^option/i.test(k) || /^[abcd]$/i.test(k) || /^opt/i.test(k)) {
+            if (
+              row[k] !== undefined &&
+              row[k] !== null &&
+              String(row[k]).trim() !== ""
+            ) {
+              opts.push(String(row[k]));
+            }
+          }
+        });
+        // also try A,B,C,D columns
+        ["A", "B", "C", "D"].forEach((k) => {
+          if (row[k] !== undefined && String(row[k]).trim() !== "")
+            opts.push(String(row[k]));
+        });
+        return opts;
+      };
+
+      // Round1, Round2, Round3 simple lists
+      const readSheet = (name) => {
+        const sheet =
+          workbook.Sheets[name] ||
+          workbook.Sheets[name.toLowerCase()] ||
+          workbook.Sheets[name.toUpperCase()];
+        if (!sheet) return null;
+        return XLSX.utils.sheet_to_json(sheet, { defval: "" });
+      };
+
+      const s1 = readSheet("round1");
+      if (s1) {
+        newDb.round1 = s1.map((r, idx) => ({
+          id: r.id || idx + 1,
+          question: r.question || r.Question || r.QuestionText || "",
+          options: parseOptions(r),
+          correct: r.correct || r.Correct || r.answer || "",
+          mediaType: r.mediaType || r.mediaType || "text",
+          mediaUrl: r.mediaUrl || r.media || "",
+        }));
+      }
+
+      const s2 = readSheet("round2");
+      if (s2) {
+        newDb.round2 = s2.map((r, idx) => ({
+          id: r.id || idx + 1,
+          question: r.question || r.Question || "",
+          type: (r.type || r.Type || "abcd").toLowerCase(),
+          options: parseOptions(r),
+          correct: r.correct || r.Correct || r.answer || "",
+          mediaType: r.mediaType || r.media || "text",
+          mediaUrl: r.mediaUrl || r.mediaUrl || "",
+        }));
+      }
+
+      const s3 = readSheet("round3");
+      if (s3) {
+        newDb.round3 = newDb.round3 || {};
+        newDb.round3.questions = s3.map((r, idx) => ({
+          id: r.id || idx + 1,
+          question: r.question || r.Question || "",
+          type: (r.type || r.Type || "abcd").toLowerCase(),
+          options: parseOptions(r),
+          correct: r.correct || r.Correct || r.answer || "",
+          mediaType: r.mediaType || r.media || "text",
+          mediaUrl: r.mediaUrl || r.mediaUrl || "",
+        }));
+      }
+
+      // round3_common sheet with themeImage/themeAnswer/themeQuestion/cols/rows
+      const s3c = readSheet("round3_common") || readSheet("round3-common");
+      if (s3c && s3c.length > 0) {
+        const r = s3c[0];
+        newDb.round3 = newDb.round3 || {};
+        newDb.round3.themeImage =
+          r.themeImage || r.theme_image || newDb.round3.themeImage || "";
+        newDb.round3.themeAnswer =
+          r.themeAnswer || r.theme_answer || newDb.round3.themeAnswer || "";
+        newDb.round3.themeQuestion =
+          r.themeQuestion ||
+          r.theme_question ||
+          newDb.round3.themeQuestion ||
+          newDb.round3.themeQuestion ||
+          "";
+        newDb.round3.cols = Number(r.cols || r.Cols || newDb.round3.cols || 4);
+        newDb.round3.rows = Number(r.rows || r.Rows || newDb.round3.rows || 3);
+      }
+
+      // Round4 sheet — expects categoryId, categoryTitle, points, question, type, option*, correct, mediaType, mediaUrl
+      const s4 = readSheet("round4");
+      if (s4) {
+        const categories = {};
+        s4.forEach((r) => {
+          const catId =
+            r.categoryId ||
+            r.category ||
+            r.Category ||
+            (r.categoryTitle
+              ? String(r.categoryTitle).toLowerCase().replace(/\s+/g, "_")
+              : "uncategorized");
+          const catTitle =
+            r.categoryTitle ||
+            r.CategoryTitle ||
+            r.category ||
+            r.Category ||
+            catId;
+          const points = Number(r.points || r.Points || 10);
+          const qobj = {
+            question: r.question || r.Question || "",
+            type: (r.type || r.Type || "open").toLowerCase(),
+            options: parseOptions(r),
+            correct: r.correct || r.Correct || r.answer || "",
+            mediaType: r.mediaType || r.media || "",
+            mediaUrl: r.mediaUrl || r.mediaUrl || "",
+          };
+          categories[catId] = categories[catId] || {
+            id: catId,
+            title: catTitle,
+            questions: { 10: [], 20: [], 30: [] },
+          };
+          const level = String(points);
+          categories[catId].questions[level] =
+            categories[catId].questions[level] || [];
+          categories[catId].questions[level].push(qobj);
+        });
+        newDb.round4 = { categories: Object.values(categories) };
+      }
+
+      setDb(newDb);
+      triggerToast("Nạp file Excel thành công!");
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi đọc tệp Excel.");
+    }
+  };
+
   const handleResetDefault = () => {
     if (confirm("Bạn có chắc muốn khôi phục về bộ câu hỏi mặc định?")) {
       setDb(defaultDatabase);
@@ -816,12 +966,14 @@ export default function App() {
                   <h5 className="font-bold text-yellow-400 text-sm mb-2">
                     📥 Nhập
                   </h5>
-                  <input
-                    type="file"
-                    accept=".json"
-                    onChange={handleImportJson}
-                    className="w-full"
-                  />
+                  <div className="flex flex-col gap-2">
+                    <input
+                      type="file"
+                      accept=".xlsx,.xls"
+                      onChange={handleImportExcel}
+                      className="w-full"
+                    />
+                  </div>
                 </div>
               </div>
 

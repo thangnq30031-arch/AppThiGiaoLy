@@ -143,7 +143,7 @@ export default function Round3({
             <div className="mt-4 w-full max-w-[900px]">
               <div className="bg-black/40 rounded-2xl p-4 border border-white/5">
                 <div className="text-sm text-purple-300 font-semibold mb-2">
-                  Câu hỏi chủ đề
+                  db.round3.themeQuestion
                 </div>
                 <div className="text-lg font-black">Đoán chủ đề bức tranh</div>
                 <div className="mt-3 text-2xl font-extrabold text-yellow-400">
