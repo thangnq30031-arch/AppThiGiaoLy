@@ -11,6 +11,7 @@ import Round4 from "./components/Round4.jsx";
 import ThemeProvider from "./theme/ThemeProvider";
 import ThemeSwitcher from "./components/common/ThemeSwitcher.jsx";
 import ThemeSettings from "./components/common/ThemeSettings.jsx";
+import { getPublicUrl } from "./utils/publicPath";
 
 // --- DỮ LIỆU CÂU HỎI MẪU MẶC ĐỊNH ---
 const defaultDatabase = {
@@ -316,10 +317,13 @@ export default function App() {
     if (timerRef.current) clearInterval(timerRef.current);
 
     let currentSeconds = 10;
+    // play first tick immediately at 10
+    sound.playTick();
     timerRef.current = setInterval(() => {
       currentSeconds--;
       setTimer(currentSeconds);
-      if (currentSeconds <= 5 && currentSeconds > 0) {
+      // play tick for each second > 0 (9..1)
+      if (currentSeconds > 0) {
         sound.playTick();
       }
 
@@ -751,24 +755,23 @@ export default function App() {
                   ĐƯỜNG LÊN NÚI SINAI
                 </h2>
                 <p className="mt-4 text-purple-300 text-lg max-w-2xl mx-auto font-medium">
-                  Chào mừng bạn đến với hệ thống trình chiếu thi đấu ngoại tuyến
-                  thông minh. Trải nghiệm kịch tính qua 4 vòng thi đầy thử
-                  thách!
+                  Chào mừng các em thiếu nhi đến với cuộc thi đố vui kinh thánh
+                  ĐƯỜNG LÊN NÚI SINAI! Hãy cùng nhau chinh phục đỉnh núi Sinai
+                  và trở thành nhà vô địch của chúng ta nhé!
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
                   <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
                     <div>
                       <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                        ⚡
+                        🏃
                       </div>
                       <h3 className="text-lg font-black text-yellow-400">
-                        VÒNG 1: SƠ LOẠI
+                        VÒNG 1:
                       </h3>
-                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                        Đếm ngược 10 giây tự động đổi câu. Không hiển thị kết
-                        quả đúng để học sinh làm bài trên giấy kiểm tra.
-                      </p>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        XUẤT HÀNH
+                      </h3>
                     </div>
                     <button
                       onClick={handleStartVòng1}
@@ -781,16 +784,14 @@ export default function App() {
                   <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
                     <div>
                       <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                        🚀
+                        🌊
                       </div>
                       <h3 className="text-lg font-black text-yellow-400">
-                        VÒNG 2: TĂNG TỐC
+                        VÒNG 2:
                       </h3>
-                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                        Hỗ trợ trắc nghiệm hoặc đáp án tự luận. Có nút kích hoạt
-                        10 giây và nút hiện đáp án đúng để quản trò phân phối
-                        điểm.
-                      </p>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        VƯỢT BIỂN ĐỎ
+                      </h3>
                     </div>
                     <button
                       onClick={handleStartVòng2}
@@ -803,15 +804,14 @@ export default function App() {
                   <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
                     <div>
                       <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                        🧩
+                        🐫
                       </div>
                       <h3 className="text-lg font-black text-yellow-400">
-                        VÒNG 3: MẢNH GHÉP
+                        VÒNG 3:
                       </h3>
-                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                        Tranh chủ đề bị che mờ bởi các mảnh ghép đa giác ngẫu
-                        nhiên. Trả lời đúng để lật mở từng mảnh ghép độc đáo.
-                      </p>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        QUA SA MẠC
+                      </h3>
                     </div>
                     <button
                       onClick={handleStartVòng3}
@@ -824,16 +824,14 @@ export default function App() {
                   <div className="bg-gradient-to-b from-indigo-900/60 to-purple-900/40 p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between items-center text-center hover:scale-105 transition-all duration-300 group">
                     <div>
                       <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                        👑
+                        ⛰️
                       </div>
                       <h3 className="text-lg font-black text-yellow-400">
-                        VÒNG 4: VỀ ĐÍCH
+                        VÒNG 4:
                       </h3>
-                      <p className="text-xs text-purple-200 mt-2 leading-relaxed">
-                        Bản đồ câu hỏi phân loại theo chủ đề và mức điểm (10,
-                        20, 30 điểm). Có tính năng kích hoạt "Ngôi Sao Hy Vọng"
-                        thần thánh!
-                      </p>
+                      <h3 className="text-lg font-black text-yellow-400">
+                        LÊN NÚI CHÚA
+                      </h3>
                     </div>
                     <button
                       onClick={handleStartVòng4}

@@ -1,71 +1,104 @@
+import { getPublicUrl } from "../utils/publicPath";
+
 class SoundSynth {
   constructor() {
-    this.ctx = null;
+    this.audio = {
+      tick: null,
+      drumroll: null,
+      correct: null,
+      claphand: null,
+    };
+    this.gain = 1.0;
   }
+
   init() {
-    if (!this.ctx) {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    // Lazy-load audio elements from public/sound
+    try {
+      if (!this.audio.tick) {
+        this.audio.tick = new Audio(getPublicUrl('sound', 'tick.mp3'));
+        this.audio.tick.preload = 'auto';
+        this.audio.tick.volume = 0.7;
+      }
+      if (!this.audio.drumroll) {
+        this.audio.drumroll = new Audio(getPublicUrl('sound', 'drumroll.mp3'));
+        this.audio.drumroll.preload = 'auto';
+        this.audio.drumroll.volume = 0.9;
+      }
+      if (!this.audio.correct) {
+        this.audio.correct = new Audio(getPublicUrl('sound', 'correct.mp3'));
+        this.audio.correct.preload = 'auto';
+        this.audio.correct.volume = 0.9;
+      }
+      if (!this.audio.claphand) {
+        this.audio.claphand = new Audio(getPublicUrl('sound', 'claphand.mp3'));
+        this.audio.claphand.preload = 'auto';
+        this.audio.claphand.volume = 0.9;
+      }
+    } catch (e) {
+      // ignore
     }
   }
+
   playTick() {
     this.init();
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(1000, this.ctx.currentTime);
-    gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.08);
+    try {
+      // clone to allow overlapping plays if needed
+      const a = this.audio.tick.cloneNode(true);
+      a.volume = (this.gain * 0.7);
+      a.play().catch(() => {});
+    } catch (e) {
+      // fallback: no-op
+    }
   }
+
   playTimeUp() {
     this.init();
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.6);
+    try {
+      const a = this.audio.drumroll.cloneNode(true);
+      a.volume = (this.gain * 0.9);
+      a.play().catch(() => {});
+    } catch (e) {}
   }
+
   playReveal() {
     this.init();
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.3);
-    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.35);
+    try {
+      const a = this.audio.correct.cloneNode(true);
+      a.volume = (this.gain * 0.9);
+      a.play().catch(() => {});
+    } catch (e) {}
   }
-  playStar() {
+
+  playClapHand() {
     this.init();
-    const now = this.ctx.currentTime;
-    const notes = [261.63, 329.63, 392.0, 523.25, 659.25, 783.99, 1046.5];
-    notes.forEach((freq, index) => {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + index * 0.08);
-      gain.gain.setValueAtTime(0.1, now + index * 0.08);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.08 + 0.3);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(now + index * 0.08);
-      osc.stop(now + index * 0.08 + 0.3);
-    });
+    try {
+      const a = this.audio.claphand.cloneNode(true);
+      a.volume = (this.gain * 0.9);
+      a.play().catch(() => {});
+    } catch (e) {}
+  }
+
+  // keep previous synthesized star sound for celebration
+  playStar() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = ctx.currentTime;
+      const notes = [261.63, 329.63, 392.0, 523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((freq, index) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + index * 0.08);
+        gain.gain.setValueAtTime(0.1, now + index * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.08 + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + index * 0.08);
+        osc.stop(now + index * 0.08 + 0.3);
+      });
+      // close context after a short delay
+      setTimeout(() => ctx.close(), 1200);
+    } catch (e) {}
   }
 }
 

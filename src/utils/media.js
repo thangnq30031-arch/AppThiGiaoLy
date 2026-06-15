@@ -1,3 +1,5 @@
+import { getPublicUrl } from './publicPath';
+
 export const isRemoteUrl = (value) => {
   return /^https?:\/\//i.test(value);
 };
@@ -14,13 +16,13 @@ export const isYouTubeUrl = (value) => {
 export const resolveImageUrl = (value) => {
   if (!value) return "";
   if (isRemoteUrl(value) || value.startsWith("/")) return value;
-  return `/images/${value}`;
+  return getPublicUrl('images', value);
 };
 
 export const resolveVideoUrl = (value) => {
   if (!value) return "";
   if (isRemoteUrl(value) || value.startsWith("/")) return value;
-  return `/videos/${value}`;
+  return getPublicUrl('videos', value);
 };
 
 export const getYouTubeEmbedUrl = (value) => {

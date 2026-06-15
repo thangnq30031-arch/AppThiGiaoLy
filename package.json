@@ -38,6 +38,15 @@
       "dist/**/*",
       "main.js"
     ],
+    "extraResources": [
+      {
+        "from": "public",
+        "to": "public"
+      }
+    ],
+    "asarUnpack": [
+      "public/**"
+    ],
     "win": {
       "target": "nsis"
     },
@@ -46,6 +55,7 @@
     },
     "linux": {
       "target": "AppImage"
-    }
+    },
+    "asar": true
   }
 }

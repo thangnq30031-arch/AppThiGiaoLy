@@ -24,13 +24,27 @@ export default function Round4({
 - Mỗi câu có 10s khi bắt đầu.
 - Có thể kích hoạt Ngôi Sao Hy Vọng.
 - Khi mở câu hỏi, bấm "Hoàn thành câu hỏi này" để ghi nhận.`;
-
+  const icons = {
+    thanh_kinh: "📖",
+    phung_vu: "⛪",
+    giao_ly: "📚",
+    tntt: "🎈",
+    giao_hoi: "🌐",
+  };
+  const title = {
+    thanh_kinh: "THÁNH KINH",
+    phung_vu: "PHỤNG VỤ",
+    giao_ly: "GIÁO LÝ",
+    tntt: "THIẾU NHI THÁNH THỂ",
+    giao_hoi: "GIÁO HỘI",
+  };
   return (
     <RoundLayout
       roundLabel="Vòng 4"
       roundTitle="LÊN NÚI CHÚA"
       onClose={() => setActiveTab("welcome")}
       rulesContent={rulesContent}
+      openDialog={false} // start with rules dialog closed
     >
       {!selectedVòng4Question && !activeCategory ? (
         <div className="space-y-6">
@@ -39,24 +53,10 @@ export default function Round4({
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {db.round4.categories.map((cat) => {
-              const icons = {
-                thanh_kinh: "📖",
-                phung_vu: "⛪",
-                giao_ly: "📚",
-                tntt: "🎈",
-                giao_hoi: "🌐",
-              };
-              const title = {
-                thanh_kinh: "THÁNH KINH",
-                phung_vu: "PHỤNG VỤ",
-                giao_ly: "GIÁO LÝ",
-                tntt: "THIẾU NHI THÁNH THỂ",
-                giao_hoi: "GIÁO HỘI",
-              };
               return (
                 <div
                   key={cat.id}
-                  className="bg-black/30 rounded-2xl border border-white/10 p-5 flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform"
+                  className="bg-black/30 hover:bg-white/10 rounded-2xl border border-white/10 p-5 flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => setActiveCategory(cat.id)}
                 >
                   <div className="text-center border-white/10 pb-3 mb-4">
@@ -81,7 +81,7 @@ export default function Round4({
               ← Quay lại
             </button>
             <h4 className="text-lg font-bold text-yellow-400 text-center flex-1">
-              DANH SÁCH CÂU HỎI
+              DANH SÁCH CÂU HỎI {title[activeCategory]}
             </h4>
             <div style={{ width: 80 }} />
           </div>

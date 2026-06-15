@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import RoundLayout from "./common/RoundLayout.jsx";
 import MediaViewer from "./common/MediaViewer.jsx";
 import useSpacebarStart from "../hooks/useSpacebarStart.js";
+import sound from "../lib/sound.js";
 
 export default function Round3Question({
   db,
@@ -33,13 +34,24 @@ export default function Round3Question({
       subtitle="Mảnh ghép bí ẩn"
       onClose={() => setActiveTab("round3")}
       rulesContent={rulesContent}
+      openDialog={false} // start with rules dialog closed
     >
       <div className="relative flex-1 min-h-0 w-full bg-black/30 rounded-2xl p-6 md:p-10 flex flex-col justify-center items-center text-center border border-white/5">
-        <div className="absolute top-6 right-6 text-right">
-          <span className="text-[10px] text-purple-300 font-bold uppercase block">
+        <div
+          className={`transition-all duration-500 transform flex flex-col items-center absolute top-6 right-6 text-right p-2 rounded-xl ${
+            isTimerRunning
+              ? "opacity-100 scale-100 max-w-[120px] translate-x-0 bg-yellow-500/10 border border-yellow-500/20 shadow-[0_0_15px_rgba(234,179,8,0.15)]"
+              : "opacity-0 scale-75 max-w-0 w-0 overflow-hidden pointer-events-none"
+          }`}
+        >
+          <span className="text-[10px] text-purple-300 font-bold uppercase tracking-wider block whitespace-nowrap">
             Thời Gian
           </span>
-          <span className="text-4xl font-black text-yellow-400">{timer}s</span>
+          <span
+            className={`text-5xl font-black ${timer <= 3 ? "text-red-500 animate-pulse" : "text-yellow-400"}`}
+          >
+            {timer}s
+          </span>
         </div>
         <h2 className="text-4xl md:text-5xl font-extrabold leading-tight max-w-4xl">
           {db.round3.questions[selectedPuzzleQ]?.question}
@@ -178,6 +190,7 @@ export default function Round3Question({
           <button
             onClick={() => {
               setShowQuestionAnswer(true);
+              sound.playReveal();
             }}
             className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-xl text-sm"
           >
@@ -200,7 +213,7 @@ export default function Round3Question({
             }}
             className={`font-bold px-6 py-3 rounded-xl text-sm transition-all bg-red-600 hover:bg-red-700 text-white cursor-pointer`}
           >
-            Quay Lại
+            🔙 Quay Lại
           </button>
         </div>
       </div>

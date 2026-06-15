@@ -56,11 +56,19 @@ export default function Round1({
         </div>
 
         <div className="relative flex-1 min-h-0 w-full bg-black/30 rounded-2xl p-6 md:p-10 flex flex-col justify-center items-center text-center border border-white/5">
-          <div className="absolute top-6 right-6 text-right">
-            <span className="text-[10px] text-purple-300 font-bold uppercase block">
+          <div
+            className={`transition-all duration-500 transform flex flex-col items-center absolute top-6 right-6 text-right p-2 rounded-xl ${
+              isTimerRunning
+                ? "opacity-100 scale-100 max-w-[120px] translate-x-0 bg-yellow-500/10 border border-yellow-500/20 shadow-[0_0_15px_rgba(234,179,8,0.15)]"
+                : "opacity-0 scale-75 max-w-0 w-0 overflow-hidden pointer-events-none"
+            }`}
+          >
+            <span className="text-[10px] text-purple-300 font-bold uppercase tracking-wider block whitespace-nowrap">
               Thời Gian
             </span>
-            <span className="text-4xl font-black text-yellow-400">
+            <span
+              className={`text-5xl font-black ${timer <= 3 ? "text-red-500 animate-pulse" : "text-yellow-400"}`}
+            >
               {timer}s
             </span>
           </div>

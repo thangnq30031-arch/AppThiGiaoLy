@@ -1,7 +1,7 @@
 import React from "react";
 import RoundLayout from "./common/RoundLayout.jsx";
 import { resolveImageUrl } from "../utils/media";
-
+import sound from "../lib/sound.js";
 export default function Round3({
   db,
   puzzlePieces,
@@ -33,6 +33,7 @@ export default function Round3({
       roundTitle="QUA SA MẠC"
       onClose={() => setActiveTab("welcome")}
       rulesContent={rulesContent}
+      openDialog={false} // start with rules dialog closed
     >
       <div className="h-full w-full flex flex-col">
         <div className="flex-1 min-h-0 flex flex-col items-center justify-center">
@@ -115,20 +116,19 @@ export default function Round3({
               <button
                 onClick={() => {
                   setThemeImageRevealed(!themeImageRevealed);
+
                   // when hiding the full image also hide the theme answer
-                  if (themeImageRevealed) setRound3ThemeAnswerVisible(false);
+                  if (themeImageRevealed) {
+                    setRound3ThemeAnswerVisible(false);
+                  } else {
+                    // if revealing the full image, also reveal the theme answer since it's a big reveal
+                    setRound3ThemeAnswerVisible(true);
+                    sound.playClapHand();
+                  }
                 }}
                 className="bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-black px-4 py-2.5 rounded-xl"
               >
                 🖼 Mở Toàn Bộ
-              </button>
-              <button
-                onClick={() => {
-                  setRound3ThemeAnswerVisible(true);
-                }}
-                className="bg-green-600 hover:bg-green-700 text-white text-xs font-black px-4 py-2.5 rounded-xl"
-              >
-                📢 Hiện Đáp Án
               </button>
             </div>
             {/* Theme question/answer frame */}

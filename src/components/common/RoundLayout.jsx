@@ -8,8 +8,9 @@ export default function RoundLayout({
   onClose,
   rulesContent,
   children,
+  openDialog = true,
 }) {
-  const [isRulesOpen, setIsRulesOpen] = useState(true);
+  const [isRulesOpen, setIsRulesOpen] = useState(openDialog);
 
   // Rules overlay rendered via portal so it's not affected by parent transforms
   const rulesOverlay = isRulesOpen ? (

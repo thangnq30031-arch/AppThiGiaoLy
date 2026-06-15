@@ -1,6 +1,6 @@
 import React from "react";
 import useSpacebarStart from "../hooks/useSpacebarStart.js";
-
+import sound from "../lib/sound.js";
 export default function Round4Question({
   db,
   selectedVòng4Question,
@@ -25,7 +25,7 @@ export default function Round4Question({
             <span className="bg-yellow-500 text-black text-xs font-black px-3 py-1 rounded-full uppercase">
               Câu {selectedVòng4Question.points} Điểm
             </span>
-            <span className="ml-2 text-xs text-purple-300">
+            <span className="ml-2 bg-green-500 text-black text-xs font-black px-3 py-1 rounded-full uppercase">
               Chủ đề:{" "}
               {
                 db.round4.categories.find(
@@ -34,25 +34,22 @@ export default function Round4Question({
               }
             </span>
           </div>
-          <button
-            title="Quay lại màn hình chọn chủ đề"
-            aria-label="Quay lại màn hình chọn chủ đề"
-            onClick={() => {
-              if (onBackToTopics) onBackToTopics();
-              else setSelectedVòng4Question(null);
-            }}
-            className="text-xs text-red-400 hover:text-red-300 font-bold"
-          >
-            Quay Lại
-          </button>
         </div>
 
         <div className="relative flex-1 min-h-0 w-full bg-black/30 rounded-2xl p-6 md:p-10 flex flex-col justify-center items-center text-center border border-white/5">
-          <div className="absolute top-6 right-6 text-right">
-            <span className="text-[10px] text-purple-300 font-bold uppercase block">
+          <div
+            className={`transition-all duration-500 transform flex flex-col items-center absolute top-6 right-6 text-right p-2 rounded-xl ${
+              isTimerRunning
+                ? "opacity-100 scale-100 max-w-[120px] translate-x-0 bg-yellow-500/10 border border-yellow-500/20 shadow-[0_0_15px_rgba(234,179,8,0.15)]"
+                : "opacity-0 scale-75 max-w-0 w-0 overflow-hidden pointer-events-none"
+            }`}
+          >
+            <span className="text-[10px] text-purple-300 font-bold uppercase tracking-wider block whitespace-nowrap">
               Thời Gian
             </span>
-            <span className="text-4xl font-black text-yellow-400">
+            <span
+              className={`text-5xl font-black ${timer <= 3 ? "text-red-500 animate-pulse" : "text-yellow-400"}`}
+            >
               {timer}s
             </span>
           </div>
@@ -101,7 +98,7 @@ export default function Round4Question({
               <div className="text-3xl md:text-4xl font-black text-yellow-400">
                 {showAnswer
                   ? selectedVòng4Question.questionData?.correct
-                  : "🔒 Đáp án ẩn"}
+                  : "🔒"}
               </div>
             </div>
           )}
@@ -109,33 +106,30 @@ export default function Round4Question({
           <div className="flex gap-4 mt-10 w-full justify-center">
             <button
               onClick={toggleStarOfHope}
-              className={`px-5 py-3 rounded-xl font-bold text-sm ${starOfHope ? "bg-red-600 text-white" : "bg-gradient-to-r from-yellow-500 to-amber-500 text-slate-950"}`}
+              className={`px-5 py-3 rounded-xl font-bold text-2xl ${starOfHope ? "bg-red-600 text-white" : "bg-gradient-to-r from-yellow-500 to-amber-500 text-slate-950"}`}
             >
-              ⭐ {starOfHope ? "Hủy" : "Kích hoạt"}
-            </button>
-            <button
-              onClick={triggerCountdown}
-              disabled={isTimerRunning}
-              className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 text-white font-bold px-5 py-3 rounded-xl text-sm"
-            >
-              ⏰ Bắt Đầu 10s
+              ⭐
             </button>
             <button
               onClick={() => {
                 setShowAnswer(true);
+                sound.playReveal();
               }}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-xl text-sm"
+              className="bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-xl text-xl"
             >
               📢 Hiện Đáp Án
             </button>
+            <button
+              onClick={() => {
+                if (onBackToTopics) onBackToTopics();
+                else setSelectedVòng4Question(null);
+                finishVòng4Question();
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-3 rounded-xl text-xl"
+            >
+              🏁 Chọn Chủ Đề
+            </button>
           </div>
-
-          <button
-            onClick={finishVòng4Question}
-            className="w-full bg-slate-800 hover:bg-slate-700 text-yellow-400 font-extrabold py-3 rounded-xl mt-6"
-          >
-            🏁 Hoàn thành câu hỏi này
-          </button>
         </div>
       </div>
     </div>
