@@ -30,8 +30,8 @@ export default function Round3Question({
   return (
     <RoundLayout
       roundLabel="Vòng 3"
-      roundTitle="MẢNH GHÉP - CÂU HỎI"
-      subtitle="Mảnh ghép bí ẩn"
+      roundTitle="QUA SA MẠC"
+      subtitle={`Nội dung câu hỏi ${selectedPuzzleQ + 1}`}
       onClose={() => setActiveTab("round3")}
       rulesContent={rulesContent}
       openDialog={false} // start with rules dialog closed
@@ -53,7 +53,7 @@ export default function Round3Question({
             {timer}s
           </span>
         </div>
-        <h2 className="text-4xl md:text-5xl font-extrabold leading-tight max-w-4xl">
+        <h2 className="text-4xl md:text-5xl font-extrabold leading-tight max-w-question">
           {db.round3.questions[selectedPuzzleQ]?.question}
         </h2>
 
@@ -125,7 +125,8 @@ export default function Round3Question({
               const reveal = !!showQuestionAnswer;
               const disabledOption = reveal || isAnswerCorrect;
 
-              let optionClass = "bg-white/5 hover:bg-white/10 cursor-pointer";
+              let optionClass =
+                "bg-gradient-to-r from-indigo-900 to-purple-900";
               if (reveal) {
                 optionClass = isCorrect
                   ? "bg-green-600"
@@ -147,10 +148,10 @@ export default function Round3Question({
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="flex">
-                      <span className="text-lg md:text-xl font-extrabold">
+                      <span className="text-lg md:text-4xl font-extrabold">
                         {letter}.&nbsp;
                       </span>
-                      <span className="text-lg md:text-xl font-extrabold">
+                      <span className="text-lg md:text-4xl font-extrabold">
                         {db.round3.questions[selectedPuzzleQ]?.options?.[idx] ||
                           ""}
                       </span>

@@ -11,12 +11,16 @@
     --secondary: #ff6fb5;
     --text-color: #ffffff;
     --accent: #7c3aed;
-    --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-family: 'Josefin Sans', sans-serif;
   }
 
   html, body, #root {
     height: 100%;
   }
+
+  html {
+  font-size: clamp(13px, 1.48vmin, 36px);
+}
 
   body {
     @apply min-h-screen antialiased;
@@ -44,4 +48,8 @@
 
 .animate-bounce-in {
   animation: bounceIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.max-w-question {
+  max-width: calc(100% - 150px); /* 1280px */
 }

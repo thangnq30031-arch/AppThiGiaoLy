@@ -10,7 +10,7 @@ const themes = {
       text: "#0f172a",
       accent: "#7c3aed",
     },
-    fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif",
+    "font-family": "Josefin Sans, sans-serif",
   },
 
   kahoot: {
@@ -24,7 +24,7 @@ const themes = {
       text: "#06143a",
       accent: "#10b981",
     },
-    fontFamily: "'Poppins', system-ui, -apple-system, Roboto, Arial, sans-serif",
+    "font-family": "Josefin Sans, sans-serif",
   },
 };
 

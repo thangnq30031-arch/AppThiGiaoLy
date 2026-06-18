@@ -48,7 +48,7 @@ export default function Round4({
     >
       {!selectedVòng4Question && !activeCategory ? (
         <div className="space-y-6">
-          <h4 className="text-lg font-bold text-yellow-400 text-center">
+          <h4 className="text-3xl font-bold text-yellow-400 text-center">
             CHỌN CHỦ ĐỀ
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -60,8 +60,10 @@ export default function Round4({
                   onClick={() => setActiveCategory(cat.id)}
                 >
                   <div className="text-center border-white/10 pb-3 mb-4">
-                    <div className="text-5xl mb-2">{icons[cat.id] || "❓"}</div>
-                    <h2 className="font-black text-base text-white">
+                    <div className="text-5xl mb-2 mt-4">
+                      {icons[cat.id] || "❓"}
+                    </div>
+                    <h2 className="font-black  text-white text-4xl">
                       {title[cat.id]}
                     </h2>
                   </div>
@@ -80,13 +82,13 @@ export default function Round4({
             >
               ← Quay lại
             </button>
-            <h4 className="text-lg font-bold text-yellow-400 text-center flex-1">
+            <h4 className="text-3xl font-bold text-yellow-400 text-center flex-1">
               DANH SÁCH CÂU HỎI {title[activeCategory]}
             </h4>
             <div style={{ width: 80 }} />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[10, 20, 30].map((points) => {
               const cat = db.round4.categories.find(
                 (c) => c.id === activeCategory,
@@ -97,7 +99,7 @@ export default function Round4({
                   key={points}
                   className="bg-black/30 rounded-2xl p-4 border border-white/10"
                 >
-                  <h5 className="font-black text-sm text-yellow-300 mb-3">
+                  <h5 className="font-black text-4xl text-yellow-300 mb-3">
                     {points} ĐIỂM
                   </h5>
                   <div className="space-y-3">
@@ -117,9 +119,9 @@ export default function Round4({
                                 q,
                               )
                             }
-                            className={`w-full p-3 text-left rounded-xl font-black ${disabled ? "bg-gray-800 text-gray-500 cursor-not-allowed" : "bg-gradient-to-r from-purple-900 to-indigo-900 text-white"}`}
+                            className={`w-full p-3 text-left rounded-xl font-black ${disabled ? "bg-gray-800 text-gray-500 cursor-not-allowed" : "bg-gradient-to-r from-purple-900 to-indigo-900 text-white hover:from-purple-800 hover:to-indigo-800"}`}
                           >
-                            <div className="truncate overflow-hidden text-ellipsis whitespace-clamp">
+                            <div className="truncate overflow-hidden text-ellipsis whitespace-clamp text-3xl text-center">
                               Câu {idx + 1}
                             </div>
                           </button>

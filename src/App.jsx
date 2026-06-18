@@ -77,7 +77,7 @@ const defaultDatabase = {
     themeAnswer: "VŨ TRỤ & KHÔNG GIAN SỐ",
     themeQuestion: "Đây là một phần của bức tranh chủ đề nào?",
     cols: 4,
-    rows: 3,
+    rows: 4,
     questions: [
       {
         id: 1,
@@ -632,7 +632,7 @@ export default function App() {
           newDb.round3.themeQuestion ||
           "";
         newDb.round3.cols = Number(r.cols || r.Cols || newDb.round3.cols || 4);
-        newDb.round3.rows = Number(r.rows || r.Rows || newDb.round3.rows || 3);
+        newDb.round3.rows = Number(r.rows || r.Rows || newDb.round3.rows || 4);
       }
 
       // Round4 sheet — expects categoryId, categoryTitle, points, question, type, option*, correct, mediaType, mediaUrl
@@ -751,7 +751,10 @@ export default function App() {
           >
             {activeTab === "welcome" && (
               <div className="py-12 text-center max-w-4xl mx-auto">
-                <h2 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-yellow-400 to-amber-300 tracking-tight leading-tight">
+                <h2
+                  style={{ lineHeight: "inherit" }}
+                  className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-yellow-400 to-amber-300 tracking-tight leading-tight"
+                >
                   ĐƯỜNG LÊN NÚI SINAI
                 </h2>
                 <p className="mt-4 text-purple-300 text-lg max-w-2xl mx-auto font-medium">

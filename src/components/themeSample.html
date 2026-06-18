@@ -1,0 +1,1242 @@
+<!-- Màn hình Câu hỏi (Tailwind) - QuizFun -->
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuizFun - Question Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#efd4d2",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#261817",
+                    "tertiary-fixed-dim": "#e8c426",
+                    "surface-variant": "#f7dcda",
+                    "on-surface": "#261817",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#fde2e0",
+                    "surface-tint": "#b4252d",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#5a403f",
+                    "secondary-fixed-dim": "#9ccaff",
+                    "on-tertiary-container": "#4c3e00",
+                    "outline-variant": "#e2bebc",
+                    "on-tertiary-fixed-variant": "#554500",
+                    "secondary": "#0062a0",
+                    "tertiary-container": "#caa900",
+                    "inverse-on-surface": "#ffedeb",
+                    "primary": "#b4252d",
+                    "secondary-fixed": "#d0e4ff",
+                    "surface-container-low": "#fff0ef",
+                    "surface-bright": "#fff8f7",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#705d00",
+                    "on-primary-fixed-variant": "#920418",
+                    "on-tertiary-fixed": "#221b00",
+                    "inverse-primary": "#ffb3af",
+                    "primary-container": "#ff5c5c",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#ffe9e7",
+                    "outline": "#8e706e",
+                    "on-secondary-fixed-variant": "#00497a",
+                    "on-secondary-fixed": "#001d35",
+                    "inverse-surface": "#3d2c2b",
+                    "surface": "#fff8f7",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffe173",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#f7dcda",
+                    "on-primary-container": "#62000c",
+                    "secondary-container": "#4dabff",
+                    "primary-fixed": "#ffdad7",
+                    "background": "#fff8f7",
+                    "on-secondary-container": "#003e68",
+                    "primary-fixed-dim": "#ffb3af",
+                    "on-primary-fixed": "#410005"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "48px",
+                    "base": "8px",
+                    "md": "24px",
+                    "xs": "4px",
+                    "xl": "80px",
+                    "sm": "12px",
+                    "gutter": "24px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Quicksand"],
+                    "body-sm": ["Quicksand"],
+                    "label-bold": ["Quicksand"],
+                    "display-lg-mobile": ["Quicksand"],
+                    "body-lg": ["Quicksand"],
+                    "headline-md-mobile": ["Quicksand"],
+                    "display-lg": ["Quicksand"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "body-sm": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "label-bold": ["18px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-lg": ["20px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "headline-md-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Essential Animations for Timer Pulse */
+        @keyframes countdown-pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(-2deg); }
+            75% { transform: scale(1.05) rotate(2deg); }
+        }
+        .timer-animate {
+            animation: countdown-pulse 1s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface dark:bg-inverse-surface border-b-4 border-outline-variant shadow-[0px_4px_0px_0px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-base">
+<span class="font-headline-md text-headline-md-mobile text-primary dark:text-primary-fixed-dim italic uppercase tracking-wider">QuizFun</span>
+</div>
+<div class="hidden md:flex gap-md items-center">
+<nav class="flex gap-md">
+<a class="font-label-bold text-label-bold text-primary border-b-4 border-primary pb-1 hover:-translate-y-0.5 transition-transform" href="#">How to Play</a>
+</nav>
+<div class="bg-primary-container px-md py-xs rounded-full font-label-bold text-on-primary-container shadow-[0px_4px_0px_0px_rgba(0,0,0,0.2)]">
+                Game PIN: 482 910
+            </div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="material-symbols-outlined text-on-surface-variant hover:-translate-y-0.5 transition-transform" data-icon="volume_up">volume_up</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:-translate-y-0.5 transition-transform" data-icon="settings">settings</button>
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center border-2 border-outline-variant overflow-hidden">
+<img alt="Kid avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWQDhV14V5fGpSCUCQkQL6NN1pTTgVYfE2jZbFUbg2lvQeRI5ZNzjpWRhSUwARSeLhCI8GWItna8_-IcyFYt_o-H2q51rIwEJ7GStt2xx8d1YAVKGx2MSxdRnrGuT0l0MPE6S_7vdx4x2KylWI6oxYSr3inJ7S0FldS96SCwQ4wz2RUgdi564Mx8v3U5Qc_j2m4NnJ0yz0Ygy_2Yy97ycoP0Aq-iu6SZzHVTs2xWZfTPBJfuwM4YJXD_d8UbCrC_ej89zCXrWNgSYK"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="mt-20 flex-1 w-full max-w-container-max mx-auto px-gutter py-md flex flex-col gap-md">
+<!-- Question Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-md items-start">
+<!-- Question Card Section -->
+<section class="lg:col-span-8 flex flex-col gap-md">
+<div class="bg-surface-container-highest p-md md:p-lg rounded-[32px] border-b-8 border-outline-variant shadow-[0px_6px_0px_0px_rgba(0,0,0,0.1)]">
+<div class="flex flex-col gap-md text-center">
+<span class="font-label-bold text-label-bold text-secondary uppercase tracking-widest">Question 5 of 10</span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
+                            Con vật nào dưới đây biết bay?
+                        </h1>
+<div class="mt-base rounded-2xl overflow-hidden border-4 border-white shadow-lg">
+<img alt="Wildlife Illustration" class="w-full h-64 md:h-80 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOPdj-99i3hwPE6I7-mjeX9E4_I-Wlq9X8ftWHZtGqs90vTWobzcWQV13IqzKuYMHmntYXieqiOsskFq21_OZ8JskalLSMHqDoTT0BlcwoiVV0KfUZbYOq1YEPwmxCwedVO52SFYrQdZOjsEHqBinbsec-X5DyE_2jzOdCQc2i0uuoB7IyUeQPtNduOeeCfjj9awOt4v0xjBrF8ad-Cg26-adJ5vvlHSazagTt73qQvq1uezhxE-4w06ezEDfAr5SRKa5gdrLHmKyK"/>
+</div>
+</div>
+</div>
+<!-- Answer Choices -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Option A -->
+<button class="active:translate-y-1 transition-all group bg-primary-container p-md rounded-2xl border-b-8 border-on-primary-fixed-variant flex items-center gap-md text-left">
+<div class="w-12 h-12 flex-shrink-0 bg-white rounded-full flex items-center justify-center font-headline-md text-primary shadow-inner">A</div>
+<span class="font-body-lg text-white">Con Voi</span>
+</button>
+<!-- Option B -->
+<button class="active:translate-y-1 transition-all group bg-secondary-container p-md rounded-2xl border-b-8 border-on-secondary-container flex items-center gap-md text-left">
+<div class="w-12 h-12 flex-shrink-0 bg-white rounded-full flex items-center justify-center font-headline-md text-secondary shadow-inner">B</div>
+<span class="font-body-lg text-white">Con Chim Cú</span>
+</button>
+<!-- Option C -->
+<button class="active:translate-y-1 transition-all group bg-tertiary-container p-md rounded-2xl border-b-8 border-on-tertiary-fixed-variant flex items-center gap-md text-left">
+<div class="w-12 h-12 flex-shrink-0 bg-white rounded-full flex items-center justify-center font-headline-md text-tertiary shadow-inner">C</div>
+<span class="font-body-lg text-white">Con Cá Heo</span>
+</button>
+<!-- Option D -->
+<button class="active:translate-y-1 transition-all group bg-secondary p-md rounded-2xl border-b-8 border-on-secondary-fixed flex items-center gap-md text-left">
+<div class="w-12 h-12 flex-shrink-0 bg-white rounded-full flex items-center justify-center font-headline-md text-secondary shadow-inner">D</div>
+<span class="font-body-lg text-white">Con Thỏ</span>
+</button>
+</div>
+</section>
+<!-- Sidebar / Controls -->
+<aside class="lg:col-span-4 flex flex-col gap-md">
+<!-- Timer Card -->
+<div class="bg-surface-container-low p-md rounded-[32px] border-b-4 border-outline-variant flex flex-col items-center gap-base">
+<span class="font-label-bold text-label-bold text-on-surface-variant">Time Remaining</span>
+<div class="relative w-40 h-40 flex items-center justify-center timer-animate">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-outline-variant" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary transition-all duration-1000" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="12"></circle>
+</svg>
+<div class="text-center">
+<span class="font-display-lg text-display-lg text-primary block">20</span>
+<span class="font-label-bold text-on-surface-variant">sec</span>
+</div>
+</div>
+</div>
+<!-- Stats Card -->
+<div class="bg-surface-container-high p-md rounded-[32px] border-b-4 border-outline-variant flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-label-bold">Players Answered</span>
+<span class="font-headline-md text-secondary">12/20</span>
+</div>
+<!-- Progress Tracker -->
+<div class="h-6 w-full bg-surface-variant rounded-full overflow-hidden p-1 shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.06)]">
+<div class="h-full bg-secondary rounded-full flex justify-end items-center relative" style="width: 60%">
+<div class="absolute right-0 translate-x-2 bg-white border-2 border-secondary w-8 h-8 rounded-full flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-secondary scale-75" data-icon="child_care">child_care</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-base bg-white/50 p-sm rounded-xl border border-outline-variant/30">
+<span class="material-symbols-outlined text-secondary" data-icon="groups">groups</span>
+<p class="font-body-sm text-on-surface-variant">8 friends are still thinking...</p>
+</div>
+</div>
+<!-- Mascot Card -->
+<div class="bg-primary-fixed p-md rounded-[32px] border-b-4 border-outline-variant flex items-center gap-md">
+<img alt="Quiz Assistant" class="w-16 h-16 bg-white rounded-full p-2 border-2 border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIFDPwKEMPFpsvXTzE3_BPsvBjZCUq3JafgHnNco7SwzOzM32_oj2oR2GBZsf1eCLzqaH7ydM4lihM7PpP9u-tE5DKNnrvI_IoEUc4D0gaH4RUN4hz6n_dNct_OXUQG7ncrqFLk0mIrSf0aFMDdOXZoWNfuPByfQwGxBxc1mmt3OJk2pQj0SaMDCTb-t_JRSdcOy-XuP0Ee1ncywX8vxKxKC9NTvPYprDtrhlARAIcA-HuOafd-HStbfA8p4fUYVrFCs_c6f4hu82S"/>
+<p class="font-body-sm text-on-primary-fixed">"Look closely at the wings in the picture!"</p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Bottom Action Bar (Mobile Only) -->
+<footer class="fixed bottom-0 left-0 w-full bg-white md:hidden p-md flex justify-center items-center">
+<button class="active:translate-y-1 transition-all w-full bg-primary text-on-primary font-label-bold py-md rounded-2xl border-b-8 border-on-primary-fixed-variant flex items-center justify-center gap-base">
+<span class="material-symbols-outlined" data-icon="skip_next">skip_next</span>
+            Skip Question
+        </button>
+</footer>
+<script>
+        // Simple logic for timer countdown demo
+        let timeLeft = 20;
+        const timerText = document.querySelector('.font-display-lg');
+        const timerCircle = document.querySelector('circle.text-primary');
+        const totalCircumference = 440;
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) {
+                timerText.innerText = timeLeft;
+                const offset = totalCircumference - (timeLeft / 20) * totalCircumference;
+                timerCircle.style.strokeDashoffset = offset;
+            } else {
+                clearInterval(countdown);
+                timerText.innerText = "!";
+                timerText.parentElement.parentElement.classList.remove('timer-animate');
+            }
+            
+            if (timeLeft < 10) {
+                document.querySelector('.timer-animate').style.animationDuration = '0.5s';
+                timerText.classList.add('text-error');
+                timerCircle.classList.replace('text-primary', 'text-error');
+            }
+        }, 1000);
+
+        // Demo feedback on click
+        document.querySelectorAll('button.active\\:translate-y-1').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // If it's a choice button (has A, B, C, D)
+                if (this.querySelector('.shadow-inner')) {
+                     this.animate([
+                        { transform: 'translateX(0px)' },
+                        { transform: 'translateX(-10px)' },
+                        { transform: 'translateX(10px)' },
+                        { transform: 'translateX(-10px)' },
+                        { transform: 'translateX(0px)' }
+                    ], { duration: 300 });
+                }
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Bảng xếp hạng (Tailwind) - QuizFun -->
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuizFun Leaderboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#efd4d2",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#261817",
+                    "tertiary-fixed-dim": "#e8c426",
+                    "surface-variant": "#f7dcda",
+                    "on-surface": "#261817",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#fde2e0",
+                    "surface-tint": "#b4252d",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#5a403f",
+                    "secondary-fixed-dim": "#9ccaff",
+                    "on-tertiary-container": "#4c3e00",
+                    "outline-variant": "#e2bebc",
+                    "on-tertiary-fixed-variant": "#554500",
+                    "secondary": "#0062a0",
+                    "tertiary-container": "#caa900",
+                    "inverse-on-surface": "#ffedeb",
+                    "primary": "#b4252d",
+                    "secondary-fixed": "#d0e4ff",
+                    "surface-container-low": "#fff0ef",
+                    "surface-bright": "#fff8f7",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#705d00",
+                    "on-primary-fixed-variant": "#920418",
+                    "on-tertiary-fixed": "#221b00",
+                    "inverse-primary": "#ffb3af",
+                    "primary-container": "#ff5c5c",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#ffe9e7",
+                    "outline": "#8e706e",
+                    "on-secondary-fixed-variant": "#00497a",
+                    "on-secondary-fixed": "#001d35",
+                    "inverse-surface": "#3d2c2b",
+                    "surface": "#fff8f7",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffe173",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#f7dcda",
+                    "on-primary-container": "#62000c",
+                    "secondary-container": "#4dabff",
+                    "primary-fixed": "#ffdad7",
+                    "background": "#fff8f7",
+                    "on-secondary-container": "#003e68",
+                    "primary-fixed-dim": "#ffb3af",
+                    "on-primary-fixed": "#410005"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "48px",
+                    "base": "8px",
+                    "md": "24px",
+                    "xs": "4px",
+                    "xl": "80px",
+                    "sm": "12px",
+                    "gutter": "24px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Quicksand"],
+                    "body-sm": ["Quicksand"],
+                    "label-bold": ["Quicksand"],
+                    "display-lg-mobile": ["Quicksand"],
+                    "body-lg": ["Quicksand"],
+                    "headline-md-mobile": ["Quicksand"],
+                    "display-lg": ["Quicksand"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "body-sm": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "label-bold": ["18px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-lg": ["20px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "headline-md-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Quicksand', sans-serif; overflow-x: hidden; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container-high border-b-4 border-outline-variant shadow-[0_4px_0_0_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md-mobile text-primary italic uppercase tracking-wider">QuizFun</span>
+<nav class="hidden md:flex gap-md">
+<a class="text-on-surface-variant font-label-bold hover:-translate-y-0.5 transition-transform" href="#">How to Play</a>
+</nav>
+</div>
+<div class="flex items-center gap-sm">
+<div class="bg-primary-container text-on-primary-container px-md py-xs rounded-full font-label-bold border-b-4 border-[#920418]">
+                Game PIN: 482 910
+            </div>
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-variant rounded-full transition-colors">settings</button>
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-variant rounded-full transition-colors">volume_up</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+<img alt="Kid avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoxboN_RLgrccZ88DZVYL7Vbkaisjq3-ETwzBCywLJOY-Fpp3jr_da0Z3wqNTxc4pHDiomFBjWpuwYppufSzc_A3Wb1JSMoViqVpHwuqztyIdgGln2B3VI2b0fUvw9nG4nRk9tKMKeb75KOKxWFcMqGpO_1pTKrFFdCzUCR-ukJLNUcJrwtgUe-FxZaYcs1KMowe9nPeuA4iczhlSYanZJsyTQxGwdOKZ9AvixJfNxdOqcHWCAy7p_O3TjKXSd84YjeKyYVfPs0bfo"/>
+</div>
+</div>
+</header>
+<div class="flex pt-20 h-screen overflow-hidden">
+<aside class="hidden lg:flex flex-col h-full w-64 bg-surface-container-low border-r-4 border-outline-variant py-md gap-sm shadow-md">
+<div class="px-md mb-md">
+<h3 class="font-headline-md text-headline-md text-primary">Room 101</h3>
+<p class="text-on-surface-variant text-body-sm">Math Quiz</p>
+</div>
+<nav class="flex-1 space-y-base">
+<div class="text-on-surface-variant p-4 flex items-center gap-base hover:bg-surface-variant rounded-xl mx-2 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">videogame_asset</span>
+<span class="font-label-bold text-label-bold">Game</span>
+</div>
+<div class="bg-secondary-container text-on-secondary-container rounded-xl mx-2 p-4 flex items-center gap-base shadow-[0_4px_0_0_rgba(0,0,0,0.2)] scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-bold text-label-bold">Leaderboard</span>
+</div>
+<div class="text-on-surface-variant p-4 flex items-center gap-base hover:bg-surface-variant rounded-xl mx-2 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-bold text-label-bold">Players</span>
+</div>
+<div class="text-on-surface-variant p-4 flex items-center gap-base hover:bg-surface-variant rounded-xl mx-2 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">music_note</span>
+<span class="font-label-bold text-label-bold">Music</span>
+</div>
+</nav>
+<div class="px-md mt-auto">
+<button class="w-full py-md font-label-bold bg-error text-on-error rounded-xl border-b-4 border-red-950 active:translate-y-0.5 active:border-b-0 transition-all">
+                    End Game
+                </button>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-md md:p-xl bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-fixed to-surface relative">
+<canvas class="absolute inset-0 pointer-events-none" id="fireworksCanvas"></canvas>
+<div class="max-w-container-max mx-auto relative z-10 flex flex-col items-center">
+<div class="text-center mb-xl">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary-container drop-shadow-lg mb-xs animate-float">
+                        Ai nhanh tay nhất nào?
+                    </h1>
+<div class="h-2 w-48 bg-tertiary-fixed rounded-full mx-auto shadow-sm"></div>
+</div>
+<div class="w-full max-w-3xl space-y-md">
+<!-- Rank 1 -->
+<div class="group flex items-center justify-between p-md bg-white rounded-3xl border-4 border-tertiary shadow-[0_8px_0_0_#caa900] hover:scale-[1.02] transition-transform cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-tertiary text-4xl absolute -top-8 left-1/2 -translate-x-1/2 -rotate-12">crown</span>
+<div class="w-16 h-16 rounded-full border-4 border-tertiary-fixed overflow-hidden bg-tertiary-fixed-dim">
+<img alt="Rank 1" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGe9DYOTndNnFXU9qh3Yo8yg2YDNMlDBkZaoeqWrL-t_sa7S26x9vpBaj610-a1hgxfRO2KvegNk1S_d570pgbLfvCNNq5yzSHvU_5mwWKYYtpZIqxAtoQEQP2TkA_8Uw2GFH7_3f18N_W-IrSoDPpNJlYTZitv5Jva4QilN6Y0NEkpkEDlv8afx4ULoDWBtZZ5ByT6FxI6XxmpLLrrCOE22HzUf0u6hFZYpW1c1CQVxEX6OwYHbBjrG_wb9xpx4HnyCuNEyYAucdU"/>
+</div>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface">Minh Anh</h2>
+<p class="text-on-surface-variant font-label-bold">Hạng 1</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-headline-md font-headline-md text-tertiary">2,450</div>
+<div class="text-body-sm font-label-bold text-on-surface-variant">điểm</div>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="flex items-center justify-between p-md bg-white rounded-3xl border-4 border-outline-variant shadow-[0_8px_0_0_#e2bebc] hover:scale-[1.02] transition-transform cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-outline text-4xl absolute -top-8 left-1/2 -translate-x-1/2 rotate-12">workspace_premium</span>
+<div class="w-16 h-16 rounded-full border-4 border-surface-variant overflow-hidden bg-surface-dim">
+<img alt="Rank 2" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg64lzP2ZwMZzYoPFeUPZQdP168MknXHZ7WV-S2-mN8Ddibopqm7sPqL-ID6-qMciMQMhIe9E-UVdOzA9nprIFEg9LshF-_VUrevCXGtj264FhJtVN9fiKEQZCoUZVO-QRyC1F_3yKtj1FxKN7i3V_1gXsJO9tVM-PQR2DOihxzNMsvcKgqZZ-k-hUYoG2AwQ57dbzMKxQ76EP63E3SnOamdwoDn0JZgFly7vZlYc0b0f8VErWmTU3-isKaHD_anXfzM2aGMHx8GIE"/>
+</div>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface">Gia Huy</h2>
+<p class="text-on-surface-variant font-label-bold">Hạng 2</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-headline-md font-headline-md text-on-surface-variant">2,120</div>
+<div class="text-body-sm font-label-bold text-on-surface-variant">điểm</div>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="flex items-center justify-between p-md bg-white rounded-3xl border-4 border-primary-fixed-dim shadow-[0_8px_0_0_#ffb3af] hover:scale-[1.02] transition-transform cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-primary text-4xl absolute -top-8 left-1/2 -translate-x-1/2">star</span>
+<div class="w-16 h-16 rounded-full border-4 border-primary-fixed overflow-hidden bg-primary-container">
+<img alt="Rank 3" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIk4hzkiwVqgphMWIk0yuGxXd4BNgm5SslGNczBU-yBWBeHccj_Li33mZrGxQFDlTfM80hXw78jheP2HDbifaGqABenLtEid-LMCYCOa6vRPZp62o8eM0Y3OLGJLkrnwOJIVPvO0bX4-91UqJ1a7u-v8eHEkI-FjUfXlPW2lAU7vHKkYdnCoqz52xlaXK9Kmi4e9PlzgqzMd91kBVRKZMfWsK-OKiBhgo-H1OiDiLX6cufoyM500LASv841fNFqYJBS5vhQa93-c5t"/>
+</div>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface">Linh Chi</h2>
+<p class="text-on-surface-variant font-label-bold">Hạng 3</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-headline-md font-headline-md text-primary">1,980</div>
+<div class="text-body-sm font-label-bold text-on-surface-variant">điểm</div>
+</div>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex items-center justify-between p-base px-md bg-surface-container-low rounded-2xl border-2 border-outline-variant border-b-4 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-on-surface-variant w-8">4</span>
+<div class="w-10 h-10 rounded-full bg-secondary-fixed overflow-hidden">
+<img alt="P4" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDEJibGhIT0QZ9-ZvsyB1iMrXJDpp8hkxnpbU1IiuKLQ02lzMt1SdzJE0TypUy0MM--riv0i-GKX5uSJPaU7JDZBH2vO1TQWgQGXOzq2hTQBeRvD4oK1qBy1dNax3VWu4resiGx_u5_lPvANSul9ZbaXuzEiEZ7Vdoj_iUEc81sRaxOWQEhBMz6cuq9ecZ9SxI--0xjfAJTil419JDNfYidNpJQrk66MqetuhejPVGsJVBwQmyMwVXKCqhs8zgvE4cqKJ1QOovAfFz"/>
+</div>
+<span class="font-label-bold text-on-surface">Bảo Nam</span>
+</div>
+<span class="font-headline-md-mobile text-on-surface-variant">1,540</span>
+</div>
+<div class="flex items-center justify-between p-base px-md bg-surface-container-low rounded-2xl border-2 border-outline-variant border-b-4 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-on-surface-variant w-8">5</span>
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed overflow-hidden">
+<img alt="P5" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlRFl0h1yOR2Mb_2DY0pyCdbT8nSvV4CDsU2l8S4KMKL9dYjDy9HcNTnDOXRp2VpPGIsY12xI_IFA38Qiy5NwYDwx3y4X5imqu1i7OPLkvKt2egcgawkV1kZS8ijvwliAlIPvLd4Evobe4yPDo1WU048tJhD4x0akrFMeu6bSvI0tUzDvpOkFUdWewcB5kboo-4ePxHKnuFRKu9yXiqtR4OYX10diLNkxifDaKSNFCb6zbIOsgMAwE_o9e2F_03U4bfFOtockU3YtV"/>
+</div>
+<span class="font-label-bold text-on-surface">Tuấn Kiệt</span>
+</div>
+<span class="font-headline-md-mobile text-on-surface-variant">1,420</span>
+</div>
+</div>
+</div>
+<div class="fixed bottom-gutter right-gutter">
+<button class="bg-[#ff9800] text-white px-xl py-md rounded-2xl flex items-center gap-base group shadow-[0_6px_0_0_#e65100] hover:-translate-y-0.5 hover:shadow-[0_8px_0_0_#e65100] active:translate-y-1 active:shadow-[0_2px_0_0_#e65100] transition-all">
+<span class="font-headline-md text-headline-md-mobile">Tiếp tục</span>
+<span class="material-symbols-outlined text-3xl group-hover:translate-x-1 transition-transform">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+<script>
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.friction = 0.95;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += 0.05;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
+            }
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff5c5c', '#4dabff', '#caa900', '#705d00', '#b4252d'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((particle, index) => {
+                if (particle.alpha <= 0) {
+                    particles.splice(index, 1);
+                } else {
+                    particle.update();
+                    particle.draw();
+                }
+            });
+        }
+
+        setInterval(() => {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * (canvas.height / 2);
+            createFirework(x, y);
+        }, 800);
+
+        window.addEventListener('mousedown', (e) => {
+            createFirework(e.clientX, e.clientY);
+        });
+
+        animate();
+    </script>
+</body></html>
+
+<!-- Màn hình Trả lời (Tailwind) - QuizFun -->
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuizFun - Answer Screen</title>
+<!-- Google Fonts: Quicksand -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#efd4d2",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#261817",
+                    "tertiary-fixed-dim": "#e8c426",
+                    "surface-variant": "#f7dcda",
+                    "on-surface": "#261817",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#fde2e0",
+                    "surface-tint": "#b4252d",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#5a403f",
+                    "secondary-fixed-dim": "#9ccaff",
+                    "on-tertiary-container": "#4c3e00",
+                    "outline-variant": "#e2bebc",
+                    "on-tertiary-fixed-variant": "#554500",
+                    "secondary": "#0062a0",
+                    "tertiary-container": "#caa900",
+                    "inverse-on-surface": "#ffedeb",
+                    "primary": "#b4252d",
+                    "secondary-fixed": "#d0e4ff",
+                    "surface-container-low": "#fff0ef",
+                    "surface-bright": "#fff8f7",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#705d00",
+                    "on-primary-fixed-variant": "#920418",
+                    "on-tertiary-fixed": "#221b00",
+                    "inverse-primary": "#ffb3af",
+                    "primary-container": "#ff5c5c",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#ffe9e7",
+                    "outline": "#8e706e",
+                    "on-secondary-fixed-variant": "#00497a",
+                    "on-secondary-fixed": "#001d35",
+                    "inverse-surface": "#3d2c2b",
+                    "surface": "#fff8f7",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffe173",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#f7dcda",
+                    "on-primary-container": "#62000c",
+                    "secondary-container": "#4dabff",
+                    "primary-fixed": "#ffdad7",
+                    "background": "#fff8f7",
+                    "on-secondary-container": "#003e68",
+                    "primary-fixed-dim": "#ffb3af",
+                    "on-primary-fixed": "#410005",
+                    // Specific Quiz Zone Colors from Source
+                    "quiz-red": "#e21b3c",
+                    "quiz-red-dark": "#b01530",
+                    "quiz-blue": "#1368ce",
+                    "quiz-blue-dark": "#0a4a96",
+                    "quiz-yellow": "#ffa602",
+                    "quiz-yellow-dark": "#cc8502",
+                    "quiz-green": "#26890c",
+                    "quiz-green-dark": "#1a5e08"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "48px",
+                    "base": "8px",
+                    "md": "24px",
+                    "xs": "4px",
+                    "xl": "80px",
+                    "sm": "12px",
+                    "gutter": "24px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Quicksand"],
+                    "body-sm": ["Quicksand"],
+                    "label-bold": ["Quicksand"],
+                    "display-lg-mobile": ["Quicksand"],
+                    "body-lg": ["Quicksand"],
+                    "headline-md-mobile": ["Quicksand"],
+                    "display-lg": ["Quicksand"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "body-sm": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "label-bold": ["18px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-lg": ["20px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "headline-md-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom 3D Interaction using pure Tailwind is possible, but helper classes keep it clean */
+        .btn-3d:active {
+            transform: translateY(4px);
+        }
+        .btn-3d:active .shadow-3d {
+            height: 0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="h-20 w-full flex justify-between items-center px-gutter bg-surface-container-high border-b-4 border-outline-variant shadow-[0px_4px_0px_0px_rgba(0,0,0,0.1)] z-50 flex-shrink-0">
+<div class="flex items-center">
+<span class="font-headline-md text-headline-md-mobile md:text-headline-md text-primary italic uppercase tracking-wider">QuizFun</span>
+</div>
+<div class="hidden md:flex flex-1 justify-center">
+<a class="font-label-bold text-label-bold text-primary border-b-4 border-primary pb-1 hover:translate-y-[-2px] transition-transform" href="#">How to Play</a>
+</div>
+<div class="flex items-center gap-md">
+<div class="bg-primary-container text-on-primary-container px-md py-xs rounded-full font-label-bold text-label-bold shadow-[0px_4px_0px_0px_rgba(0,0,0,0.1)] whitespace-nowrap">
+                Game PIN: 482 910
+            </div>
+<div class="flex gap-base">
+<button class="p-2 rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">volume_up</span>
+</button>
+</div>
+<img alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9Bp7QInMOKvq5pR9rJwhFtIgm08s64GWqn7YFloatV4g9AXtvTRP0-W4GHuWtTkrJWDFCyYM0kipV3EPMIFt1Cb-iziQ4Cvq3COerDqu9AYn4VE77XQro8N346M3OsL_C0ldgwU8DuyzRt0ZVtH8VDfuwZoHE8jn7I-ICoumQmzyliIuIMRyWyAoR-2_Y96EeJpjybpiRz20w9njf-PYUYVHBjgsA-Tx_F_CEUpdEC4EAUvPJYjLKYE64pXkYT5WUhQ5YqxwVz-y2"/>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="hidden lg:flex w-64 bg-surface-container-low border-r-4 border-outline-variant flex-col py-md z-40">
+<div class="px-md mb-lg">
+<h2 class="font-headline-md text-headline-md text-primary leading-tight">Room 101</h2>
+<p class="font-label-bold text-on-surface-variant">Math Quiz</p>
+</div>
+<nav class="flex-grow flex flex-col gap-xs px-2">
+<button class="flex items-center gap-base p-4 bg-secondary-container text-on-secondary-container rounded-xl shadow-[0px_4px_0px_0px_rgba(0,0,0,0.1)] w-full text-left">
+<span class="material-symbols-outlined">videogame_asset</span>
+<span class="font-label-bold">Game</span>
+</button>
+<button class="flex items-center gap-base p-4 text-on-surface-variant hover:bg-surface-variant rounded-xl transition-colors w-full text-left">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-bold">Leaderboard</span>
+</button>
+<button class="flex items-center gap-base p-4 text-on-surface-variant hover:bg-surface-variant rounded-xl transition-colors w-full text-left">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-bold">Players</span>
+</button>
+<button class="flex items-center gap-base p-4 text-on-surface-variant hover:bg-surface-variant rounded-xl transition-colors w-full text-left">
+<span class="material-symbols-outlined">music_note</span>
+<span class="font-label-bold">Music</span>
+</button>
+</nav>
+<div class="px-md mt-auto">
+<button class="w-full bg-error text-on-error py-4 rounded-xl font-label-bold shadow-[0px_6px_0px_0px_rgba(147,0,10,1)] active:translate-y-[4px] active:shadow-none transition-all">
+                    End Game
+                </button>
+</div>
+</aside>
+<!-- Main Answer Grid -->
+<main class="flex-1 relative bg-outline-variant p-1">
+<div class="grid grid-cols-2 grid-rows-2 gap-1 h-full w-full">
+<!-- RED: Đại bàng -->
+<button class="btn-3d relative bg-quiz-red rounded-xl overflow-hidden group focus:ring-4 focus:ring-white/30 transition-transform">
+<div class="flex flex-col items-center justify-center h-full p-4">
+<span class="material-symbols-outlined text-[100px] md:text-[160px] text-white opacity-20 absolute select-none" style="font-variation-settings: 'FILL' 1;">change_history</span>
+<div class="z-10 text-center">
+<span class="material-symbols-outlined text-[48px] md:text-[80px] text-white mb-2 block" style="font-variation-settings: 'FILL' 1;">change_history</span>
+<h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white uppercase">Đại bàng</h3>
+</div>
+</div>
+<div class="shadow-3d absolute bottom-0 left-0 w-full h-2 bg-quiz-red-dark"></div>
+</button>
+<!-- BLUE: Con voi -->
+<button class="btn-3d relative bg-quiz-blue rounded-xl overflow-hidden group focus:ring-4 focus:ring-white/30 transition-transform">
+<div class="flex flex-col items-center justify-center h-full p-4">
+<span class="material-symbols-outlined text-[100px] md:text-[160px] text-white opacity-20 absolute select-none" style="font-variation-settings: 'FILL' 1;">pentagon</span>
+<div class="z-10 text-center">
+<span class="material-symbols-outlined text-[48px] md:text-[80px] text-white mb-2 block" style="font-variation-settings: 'FILL' 1;">pentagon</span>
+<h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white uppercase">Con voi</h3>
+</div>
+</div>
+<div class="shadow-3d absolute bottom-0 left-0 w-full h-2 bg-quiz-blue-dark"></div>
+</button>
+<!-- YELLOW: Con cá -->
+<button class="btn-3d relative bg-quiz-yellow rounded-xl overflow-hidden group focus:ring-4 focus:ring-white/30 transition-transform">
+<div class="flex flex-col items-center justify-center h-full p-4">
+<span class="material-symbols-outlined text-[100px] md:text-[160px] text-white opacity-20 absolute select-none" style="font-variation-settings: 'FILL' 1;">circle</span>
+<div class="z-10 text-center">
+<span class="material-symbols-outlined text-[48px] md:text-[80px] text-white mb-2 block" style="font-variation-settings: 'FILL' 1;">circle</span>
+<h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white uppercase">Con cá</h3>
+</div>
+</div>
+<div class="shadow-3d absolute bottom-0 left-0 w-full h-2 bg-quiz-yellow-dark"></div>
+</button>
+<!-- GREEN: Con bò -->
+<button class="btn-3d relative bg-quiz-green rounded-xl overflow-hidden group focus:ring-4 focus:ring-white/30 transition-transform">
+<div class="flex flex-col items-center justify-center h-full p-4">
+<span class="material-symbols-outlined text-[100px] md:text-[160px] text-white opacity-20 absolute select-none" style="font-variation-settings: 'FILL' 1;">square</span>
+<div class="z-10 text-center">
+<span class="material-symbols-outlined text-[48px] md:text-[80px] text-white mb-2 block" style="font-variation-settings: 'FILL' 1;">square</span>
+<h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white uppercase">Con bò</h3>
+</div>
+</div>
+<div class="shadow-3d absolute bottom-0 left-0 w-full h-2 bg-quiz-green-dark"></div>
+</button>
+</div>
+<!-- Floating Progress Bar -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:w-[600px] z-50">
+<div class="bg-surface border-4 border-outline-variant rounded-full p-2 shadow-2xl">
+<div class="relative w-full h-6 bg-surface-container-highest rounded-full overflow-hidden">
+<!-- Progress fill -->
+<div class="absolute top-0 left-0 h-full bg-gradient-to-r from-quiz-green to-quiz-green-dark transition-all duration-1000 flex items-center justify-end px-3" style="width: 45%;">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Interaction Script -->
+<script>
+        // Simple log for interaction feedback
+        document.querySelectorAll('button.btn-3d').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const label = btn.querySelector('h3').textContent;
+                console.log(`Answer Selected: ${label}`);
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Màn hình Chờ (Tailwind) - QuizFun -->
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#efd4d2",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#261817",
+                        "tertiary-fixed-dim": "#e8c426",
+                        "surface-variant": "#f7dcda",
+                        "on-surface": "#261817",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#fde2e0",
+                        "surface-tint": "#b4252d",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#5a403f",
+                        "secondary-fixed-dim": "#9ccaff",
+                        "on-tertiary-container": "#4c3e00",
+                        "outline-variant": "#e2bebc",
+                        "on-tertiary-fixed-variant": "#554500",
+                        "secondary": "#0062a0",
+                        "tertiary-container": "#caa900",
+                        "inverse-on-surface": "#ffedeb",
+                        "primary": "#b4252d",
+                        "secondary-fixed": "#d0e4ff",
+                        "surface-container-low": "#fff0ef",
+                        "surface-bright": "#fff8f7",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#705d00",
+                        "on-primary-fixed-variant": "#920418",
+                        "on-tertiary-fixed": "#221b00",
+                        "inverse-primary": "#ffb3af",
+                        "primary-container": "#ff5c5c",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#ffe9e7",
+                        "outline": "#8e706e",
+                        "on-secondary-fixed-variant": "#00497a",
+                        "on-secondary-fixed": "#001d35",
+                        "inverse-surface": "#3d2c2b",
+                        "surface": "#fff8f7",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffe173",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#f7dcda",
+                        "on-primary-container": "#62000c",
+                        "secondary-container": "#4dabff",
+                        "primary-fixed": "#ffdad7",
+                        "background": "#fff8f7",
+                        "on-secondary-container": "#003e68",
+                        "primary-fixed-dim": "#ffb3af",
+                        "on-primary-fixed": "#410005",
+                        "growth-green": "#4CAF50",
+                        "growth-green-dark": "#388E3C"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "48px",
+                        "base": "8px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Quicksand"],
+                        "body-sm": ["Quicksand"],
+                        "label-bold": ["Quicksand"],
+                        "display-lg-mobile": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "headline-md-mobile": ["Quicksand"],
+                        "display-lg": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-sm": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "label-bold": ["18px", {"lineHeight": "1", "fontWeight": "700"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-lg": ["20px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "headline-md-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Quicksand', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
+        
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both; }
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.4) 0%, transparent 25%);
+            background-color: #fff8f7;
+        }
+
+        .rainbow-gradient {
+            background: linear-gradient(90deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF, #9B59B6);
+            height: 8px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 60;
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+            opacity: 0.8;
+            filter: blur(2px);
+        }
+    </style>
+</head>
+<body class="bg-pattern min-h-screen flex flex-col overflow-x-hidden text-on-surface">
+<div class="rainbow-gradient"></div>
+<!-- Background Atmospheric Elements -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="cloud w-32 h-12 top-20 left-[10%] floating" style="animation-delay: 0s;"></div>
+<div class="cloud w-48 h-16 top-40 right-[15%] floating" style="animation-delay: 1s;"></div>
+<div class="cloud w-24 h-10 bottom-32 left-[20%] floating" style="animation-delay: 0.5s;"></div>
+<svg class="absolute -top-20 left-1/2 -translate-x-1/2 w-[120%] opacity-10" viewbox="0 0 1000 500">
+<path d="M 100 500 A 400 400 0 0 1 900 500" fill="none" stroke="url(#rainbow)" stroke-width="100"></path>
+<defs>
+<lineargradient id="rainbow" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" style="stop-color:#FF6B6B"></stop>
+<stop offset="25%" style="stop-color:#FFD93D"></stop>
+<stop offset="50%" style="stop-color:#6BCB77"></stop>
+<stop offset="75%" style="stop-color:#4D96FF"></stop>
+<stop offset="100%" style="stop-color:#9B59B6"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container-high border-b-4 border-outline-variant shadow-[0px_4px_0px_0px_rgba(0,0,0,0.1)]">
+<div class="font-headline-md text-headline-md-mobile md:text-headline-md text-primary italic uppercase tracking-wider">
+            QuizFun
+        </div>
+<div class="hidden md:flex gap-md items-center">
+<a class="text-primary border-b-4 border-primary pb-1 font-label-bold text-label-bold" href="#">How to Play</a>
+</div>
+<div class="flex items-center gap-sm">
+<div class="bg-primary-container text-on-primary-container px-md py-xs rounded-full font-label-bold text-label-bold shadow-sm">
+                Game PIN: 482 910
+            </div>
+<button class="material-symbols-outlined text-on-surface-variant hover:translate-y-[-2px] transition-transform">volume_up</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:translate-y-[-2px] transition-transform">settings</button>
+</div>
+</header>
+<!-- Side Navigation (Web) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-20 h-[calc(100vh-5rem)] w-64 bg-surface-container-low border-r-4 border-outline-variant py-md gap-sm z-40">
+<div class="px-md mb-md">
+<div class="flex items-center gap-base">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Teacher profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRd4aa3pMwabbBIbmhwZzQI0yDJJsykyOi2Ydp5ZSHKUx-ve4uU6PN4bxkKRjCqO8CaZ9-MlBeCwFK0yjkL04rSk2Is8YGdcPehYvsiW4SWct9d8--b1ekU43LHzS5HOX5OwZ_jVeVwrZkUldYyAnvvio2HxcyGokPRgKsNXu5tDUkoRYBriP-IUCXn4eX6IHRAGwxxxf8j15UIY9uB1u7REKoPamAKSHLmRFEJ6Mm4Ft9EhHAeMPYfHdOjnhBSQcNMnmgG3PDLLj-"/>
+</div>
+<div>
+<div class="font-label-bold text-label-bold text-on-surface">Room 101</div>
+<div class="text-body-sm text-on-surface-variant">Math Quiz</div>
+</div>
+</div>
+</div>
+<nav class="flex-1">
+<a class="bg-secondary-container text-on-secondary-container rounded-xl mx-2 p-4 flex items-center gap-base shadow-[0px_4px_0px_0px_rgba(0,0,0,0.2)] font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">videogame_asset</span> Game
+            </a>
+<a class="text-on-surface-variant p-4 flex items-center gap-base hover:bg-surface-variant rounded-xl mx-2 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">leaderboard</span> Leaderboard
+            </a>
+<a class="text-on-surface-variant p-4 flex items-center gap-base hover:bg-surface-variant rounded-xl mx-2 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">group</span> Players
+            </a>
+<a class="text-on-surface-variant p-4 flex items-center gap-base hover:bg-surface-variant rounded-xl mx-2 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">music_note</span> Music
+            </a>
+</nav>
+<div class="px-md mt-auto">
+<button class="w-full py-sm bg-error text-on-error rounded-xl font-label-bold text-label-bold hover:bg-opacity-90 transition-all shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] active:translate-y-1">
+                End Game
+            </button>
+</div>
+</aside>
+<!-- Main Lobby Canvas -->
+<main class="flex-1 pt-32 pb-xl px-gutter lg:ml-64 relative z-10 flex flex-col items-center max-w-container-max mx-auto w-full">
+<!-- Header Title -->
+<div class="text-center mb-lg space-y-base">
+<h1 class="font-headline-md text-headline-md-mobile md:text-display-lg text-primary drop-shadow-sm">
+                Đang chờ các bạn nhỏ tham gia...
+            </h1>
+<p class="text-body-lg text-on-surface-variant font-medium">Sẵn sàng để bắt đầu thử thách kiến thức chưa nào?</p>
+</div>
+<!-- Hero PIN Section -->
+<div class="w-full max-w-2xl bg-surface-container rounded-[2rem] p-lg text-center shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-8 border-outline-variant relative overflow-hidden mb-lg">
+<div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
+<div class="text-on-surface-variant font-label-bold text-label-bold uppercase tracking-widest mb-md">Mã PIN Trò Chơi</div>
+<div class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-[0.2em] font-extrabold select-all cursor-pointer hover:scale-105 transition-transform">
+                482 910
+            </div>
+<button class="mt-lg bg-growth-green text-white px-xl py-md rounded-2xl font-headline-md text-headline-md-mobile md:text-headline-md flex items-center justify-center gap-sm mx-auto w-full md:w-auto transition-all shadow-[0_6px_0px_0px_#388E3C] hover:translate-y-[-2px] hover:shadow-[0_8px_0px_0px_#388E3C] active:translate-y-[4px] active:shadow-[0_2px_0px_0px_#388E3C]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                Bắt đầu
+            </button>
+</div>
+<!-- Players List Section -->
+<div class="w-full">
+<div class="flex justify-between items-end mb-md">
+<h3 class="font-headline-md text-headline-md-mobile text-secondary flex items-center gap-sm">
+<span class="material-symbols-outlined">group</span> 
+                    Các bạn đã vào (12)
+                </h3>
+</div>
+<!-- Bento Grid of Players -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-md" id="player-list">
+<!-- Player Card 1 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200">
+<div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-4xl shadow-inner">
+                        🐱
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">Mimi</span>
+</div>
+<!-- Player Card 2 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200" style="animation-delay: 0.1s;">
+<div class="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center text-4xl shadow-inner">
+                        🐶
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">LuLu</span>
+</div>
+<!-- Player Card 3 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200" style="animation-delay: 0.2s;">
+<div class="w-20 h-20 rounded-full bg-yellow-100 flex items-center justify-center text-4xl shadow-inner">
+                        🐻
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">Gấu Bi</span>
+</div>
+<!-- Player Card 4 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200" style="animation-delay: 0.3s;">
+<div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center text-4xl shadow-inner">
+                        🐰
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">Thỏ Trắng</span>
+</div>
+<!-- Player Card 5 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200" style="animation-delay: 0.4s;">
+<div class="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center text-4xl shadow-inner">
+                        🦁
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">Leo</span>
+</div>
+<!-- Player Card 6 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200" style="animation-delay: 0.5s;">
+<div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center text-4xl shadow-inner">
+                        🐼
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">Panda</span>
+</div>
+<!-- Player Card 7 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200" style="animation-delay: 0.6s;">
+<div class="w-20 h-20 rounded-full bg-pink-100 flex items-center justify-center text-4xl shadow-inner">
+                        🐷
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">Heo Con</span>
+</div>
+<!-- Player Card 8 -->
+<div class="bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200" style="animation-delay: 0.7s;">
+<div class="w-20 h-20 rounded-full bg-cyan-100 flex items-center justify-center text-4xl shadow-inner">
+                         foxes
+                        🦊
+                    </div>
+<span class="font-label-bold text-label-bold text-on-surface">Cáo Nhỏ</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-high border-t-4 border-outline-variant px-gutter h-20 flex justify-around items-center z-50">
+<button class="flex flex-col items-center gap-xs text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">videogame_asset</span>
+<span class="text-xs font-label-bold">Chơi</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-xs font-label-bold">Xếp hạng</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined">group</span>
+<span class="text-xs font-label-bold">Bạn bè</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-xs font-label-bold">Cài đặt</span>
+</button>
+</nav>
+<script>
+        // Simulate new players joining
+        const names = ["Sóc Nâu", "Voi Con", "Hổ Vằn", "Khỉ Con", "Nai Nhỏ"];
+        const avatars = ["🐿️", "🐘", "🐯", "🐒", "🦌"];
+        const colors = ["bg-amber-100", "bg-gray-100", "bg-yellow-200", "bg-brown-100", "bg-orange-50"];
+        let count = 0;
+
+        const interval = setInterval(() => {
+            if (count >= names.length) {
+                clearInterval(interval);
+                return;
+            }
+
+            const container = document.getElementById('player-list');
+            const card = document.createElement('div');
+            card.className = "bounce-in bg-white p-md rounded-2xl flex flex-col items-center gap-sm shadow-[0px_8px_0px_0px_rgba(0,0,0,0.05)] border-b-4 border-slate-200";
+            card.innerHTML = `
+                <div class="w-20 h-20 rounded-full ${colors[count]} flex items-center justify-center text-4xl shadow-inner">
+                    ${avatars[count]}
+                </div>
+                <span class="font-label-bold text-label-bold text-on-surface">${names[count]}</span>
+            `;
+            container.appendChild(card);
+            count++;
+            
+            if(window.innerWidth < 768) {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }
+        }, 3000);
+
+        document.querySelector('.font-display-lg').addEventListener('click', function() {
+            const pin = this.innerText;
+            navigator.clipboard.writeText(pin).then(() => {
+                const originalText = this.innerText;
+                this.innerText = "Đã sao chép!";
+                this.classList.remove('text-primary');
+                this.classList.add('text-growth-green');
+                setTimeout(() => {
+                    this.innerText = originalText;
+                    this.classList.add('text-primary');
+                    this.classList.remove('text-growth-green');
+                }, 1500);
+            });
+        });
+    </script>
+</body></html>

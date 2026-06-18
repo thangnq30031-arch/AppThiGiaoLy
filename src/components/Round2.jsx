@@ -77,7 +77,7 @@ export default function Round2({
             </span>
           </div>
 
-          <h4 className="text-4xl md:text-5xl font-extrabold leading-tight max-w-3xl">
+          <h4 className="text-4xl md:text-5xl font-extrabold leading-tight max-w-question">
             {q.question}
           </h4>
 
@@ -146,14 +146,14 @@ export default function Round2({
                 return (
                   <div
                     key={letter}
-                    className={`p-6 md:p-8 rounded-3xl text-left flex items-center justify-between gap-4 ${showAnswer && isCorrect ? "bg-green-600" : "bg-white/5"}`}
+                    className={`p-6 md:p-8 rounded-3xl text-left flex items-center justify-between gap-4 ${showAnswer && isCorrect ? "bg-green-600" : "bg-gradient-to-r from-indigo-900 to-purple-900 "}`}
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex">
-                        <span className="text-lg md:text-xl font-extrabold">
+                        <span className="text-lg md:text-4xl font-extrabold">
                           {letter}.&nbsp;
                         </span>
-                        <span className="text-lg md:text-xl font-extrabold">
+                        <span className="text-lg md:text-4xl font-extrabold">
                           {q.options[idx] || ""}
                         </span>
                       </div>
