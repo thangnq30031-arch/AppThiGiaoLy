@@ -30,7 +30,7 @@ export function ThemeProvider({ children }) {
       const saved = localStorage.getItem(THEME_NAME_KEY);
       if (saved) return saved;
     } catch (e) {}
-    return "kahoot" in defaultThemes ? "kahoot" : Object.keys(defaultThemes)[0];
+    return "light" in defaultThemes ? "light" : Object.keys(defaultThemes)[0];
   });
 
   const currentTheme = themes[currentName] || Object.values(themes)[0];

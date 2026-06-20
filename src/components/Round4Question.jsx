@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import useSpacebarStart from "../hooks/useSpacebarStart.js";
+import { useSpacebarStart } from "../hooks/useSpacebarStart.js";
 import sound from "../lib/sound.js";
 import MediaViewer from "./common/MediaViewer.jsx";
 
@@ -278,7 +278,7 @@ export default function Round4Question({
                           selectedVòng4Question.questionData?.mediaType
                         }
                         mediaUrl={selectedVòng4Question.questionData?.mediaUrl}
-                        className="max-h-full max-w-full object-contain shadow-2xl"
+                        className="w-full h-full object-contain shadow-2xl"
                       />
                     </div>
                     <button

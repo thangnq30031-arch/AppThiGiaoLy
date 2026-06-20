@@ -7,6 +7,7 @@ class SoundSynth {
       drumroll: null,
       correct: null,
       claphand: null,
+      completeSound: null,
     };
     this.gain = 1.0;
   }
@@ -33,6 +34,11 @@ class SoundSynth {
         this.audio.claphand = new Audio(getPublicUrl('sound', 'claphand.mp3'));
         this.audio.claphand.preload = 'auto';
         this.audio.claphand.volume = 0.9;
+      }
+      if (!this.audio.completeSound) {
+        this.audio.completeSound = new Audio(getPublicUrl('sound', 'completeSound.mp3'));
+        this.audio.completeSound.preload = 'auto';
+        this.audio.completeSound.volume = 0.9;
       }
     } catch (e) {
       // ignore
@@ -73,6 +79,15 @@ class SoundSynth {
     this.init();
     try {
       const a = this.audio.claphand.cloneNode(true);
+      a.volume = (this.gain * 0.9);
+      a.play().catch(() => {});
+    } catch (e) {}
+  }
+
+  playRoundComplete() {
+    this.init();
+    try {
+      const a = this.audio.completeSound.cloneNode(true);
       a.volume = (this.gain * 0.9);
       a.play().catch(() => {});
     } catch (e) {}

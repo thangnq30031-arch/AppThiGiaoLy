@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import RoundLayout from "./common/RoundLayout.jsx";
 import MediaViewer from "./common/MediaViewer.jsx";
-import useSpacebarStart from "../hooks/useSpacebarStart.js";
-
+import {
+  useSpacebarStart,
+  useNextButton,
+  usePrevButton,
+} from "../hooks/useSpacebarStart.js";
 export default function Round2({
   db,
   currentQIndex,
@@ -16,23 +19,35 @@ export default function Round2({
   sound,
   triggerToast,
   setActiveTab,
+  completeRound2,
 }) {
   const [isMediaFullscreen, setIsMediaFullscreen] = useState(false);
   const q = db.round2[currentQIndex];
 
   useSpacebarStart(triggerCountdown, isTimerRunning);
+  const handleNext = () => {
+    if (currentQIndex < db.round2.length - 1) {
+      setCurrentQIndex(currentQIndex + 1);
+      stopCountdown();
+      setShowAnswer(false);
+    }
+  };
 
-  const rulesContent = `- Nhấn nút "Thể lệ" để xem nguyên tắc Vòng 2.
-- Nhấn SPACE để bắt đầu nếu bộ đếm chưa chạy.
-- Bấm "Xem Hình/Video" để mở toàn màn hình.
-- Với câu trắc nghiệm, bấm "Hiện Đáp Án Đúng" để kiểm tra.`;
+  const handlePrev = () => {
+    if (currentQIndex > 0) {
+      setCurrentQIndex(currentQIndex - 1);
+      stopCountdown();
+    }
+  };
+  useNextButton(handleNext, isMediaFullscreen || isTimerRunning);
+  usePrevButton(handlePrev, isMediaFullscreen || isTimerRunning);
 
   return (
     <RoundLayout
       roundLabel="Vòng 2"
       roundTitle="VƯỢT BIỂN ĐỎ"
       onClose={() => setActiveTab("welcome")}
-      rulesContent={rulesContent}
+      rulesContent={db.round2.rule}
     >
       <div className="h-full w-full flex flex-col">
         <div className="flex justify-between items-center mb-6">
@@ -49,12 +64,14 @@ export default function Round2({
                   setShowAnswer(false);
                   stopCountdown();
                 } else {
-                  triggerToast("Đã hết câu hỏi Vòng 2!");
+                  completeRound2();
                 }
               }}
               className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl"
             >
-              Câu tiếp theo
+              {currentQIndex < db.round2.length - 1
+                ? "Câu tiếp theo"
+                : "Hoàn thành Vòng 2"}
             </button>
           </div>
         </div>
@@ -125,7 +142,7 @@ export default function Round2({
                     <MediaViewer
                       mediaType={q.mediaType}
                       mediaUrl={q.mediaUrl}
-                      className="max-h-full max-w-full object-contain shadow-2xl"
+                      className="w-full h-full object-contain shadow-2xl"
                     />
                   </div>
                   <button
@@ -169,19 +186,19 @@ export default function Round2({
             </div>
           ) : (
             <div className="bg-black/40 rounded-2xl p-6 mt-8 w-full text-center border border-white/5">
-              <div className="text-3xl font-black text-yellow-400">
+              <div className="text-3xl md:text-4xl font-black text-yellow-400">
                 {showAnswer ? q.correct : "🔒 Đáp án ẩn"}
               </div>
             </div>
           )}
 
-          <div className="flex items-center gap-6 mt-8 w-full">
+          <div className="flex items-center gap-6 mt-8 w-full justify-center">
             <button
               onClick={() => {
                 setShowAnswer(true);
                 sound.playReveal();
               }}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-xl"
+              className="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-2 rounded-xl text-xs"
             >
               📢 Hiện Đáp Án Đúng
             </button>

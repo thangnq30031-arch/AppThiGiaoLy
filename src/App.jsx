@@ -9,8 +9,6 @@ import Round3 from "./components/Round3.jsx";
 import Round3Question from "./components/Round3Question.jsx";
 import Round4 from "./components/Round4.jsx";
 import ThemeProvider from "./theme/ThemeProvider";
-import ThemeSwitcher from "./components/common/ThemeSwitcher.jsx";
-import ThemeSettings from "./components/common/ThemeSettings.jsx";
 import { getPublicUrl } from "./utils/publicPath";
 
 // --- DỮ LIỆU CÂU HỎI MẪU MẶC ĐỊNH ---
@@ -286,6 +284,8 @@ export default function App() {
   const [showAnswer, setShowAnswer] = useState(false);
   const contentWrapperRef = useRef(null);
   const [contentScale, setContentScale] = useState(1);
+  const [isRound1Finished, setIsRound1Finished] = useState(false); // Trạng thái kết thúc vòng 1
+  const [isRound2Finished, setIsRound2Finished] = useState(false); // Trạng thái kết thúc vòng 2
 
   // Vòng 3 - Trạng thái nâng cấp lưới tổ ong động
   const [puzzlePieces, setPuzzlePieces] = useState([]);
@@ -343,6 +343,31 @@ export default function App() {
     setIsTimerRunning(false);
   };
 
+  // Hàm kích hoạt hiệu ứng pháo giấy liên tục trong 3 giây
+  const triggerConfetti = () => {
+    const duration = 3 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.8 },
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.8 },
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  };
+
   useEffect(() => {
     const updateScale = () => {
       const wrapper = contentWrapperRef.current;
@@ -389,7 +414,9 @@ export default function App() {
           setTimer(10);
           return prev + 1;
         } else {
-          triggerToast("Đã hoàn thành toàn bộ câu hỏi Vòng 1!");
+          setIsRound1Finished(true);
+          triggerConfetti();
+          sound.playRoundComplete();
           return prev;
         }
       });
@@ -409,6 +436,12 @@ export default function App() {
     startCountdown(() => {
       triggerToast("Hết giờ suy nghĩ!");
     });
+  };
+
+  const completeRound2 = () => {
+    setIsRound2Finished(true);
+    triggerConfetti();
+    sound.playRoundComplete();
   };
 
   // Lắng nghe thay đổi đề để thiết lập lại kết cấu tổ ong
@@ -675,6 +708,19 @@ export default function App() {
         newDb.round4 = { categories: Object.values(categories) };
       }
 
+      const rule = readSheet("rule");
+      if (rule && rule.length > 0) {
+        const r = rule[0];
+        newDb.round1 = newDb.round1 || {};
+        newDb.round2 = newDb.round2 || {};
+        newDb.round3 = newDb.round3 || {};
+        newDb.round4 = newDb.round4 || {};
+        newDb.round1.rule = r.round1Rule || "";
+        newDb.round2.rule = r.round2Rule || "";
+        newDb.round3.rule = r.round3Rule || "";
+        newDb.round4.rule = r.round4Rule || "";
+      }
+
       setDb(newDb);
       triggerToast("Nạp file Excel thành công!");
     } catch (err) {
@@ -712,7 +758,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-300">
-                ĐƯỜNG LÊN NÚI SINAI
+                ĐƯỜNG LÊN ĐỈNH SINAI
               </h1>
               <p className="text-[10px] uppercase text-purple-300 font-bold tracking-widest">
                 Hệ Thống Đố Vui Kinh Thánh
@@ -733,10 +779,6 @@ export default function App() {
             >
               ⚙️ Quản Lý Câu Hỏi
             </button>
-            <div className="ml-2 flex items-center gap-2">
-              <ThemeSwitcher />
-              <ThemeSettings />
-            </div>
           </div>
         </header>
 
@@ -755,11 +797,11 @@ export default function App() {
                   style={{ lineHeight: "inherit" }}
                   className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-yellow-400 to-amber-300 tracking-tight leading-tight"
                 >
-                  ĐƯỜNG LÊN NÚI SINAI
+                  ĐƯỜNG LÊN ĐỈNH SINAI
                 </h2>
                 <p className="mt-4 text-purple-300 text-lg max-w-2xl mx-auto font-medium">
                   Chào mừng các em thiếu nhi đến với cuộc thi đố vui kinh thánh
-                  ĐƯỜNG LÊN NÚI SINAI! Hãy cùng nhau chinh phục đỉnh núi Sinai
+                  ĐƯỜNG LÊN ĐỈNH SINAI! Hãy cùng nhau chinh phục đỉnh núi Sinai
                   và trở thành nhà vô địch của chúng ta nhé!
                 </p>
 
@@ -847,7 +889,26 @@ export default function App() {
               </div>
             )}
 
-            {activeTab === "round1" && (
+            {activeTab === "round1" && isRound1Finished && (
+              /* Màn hình chúc mừng hoàn thành vòng thi */
+              <div className="h-full w-full flex flex-col justify-center items-center text-center p-10 animate-fade-in">
+                <h2 className="text-5xl md:text-6xl font-black text-yellow-400 mb-4 drop-shadow-[0_0_15px_rgba(234,179,8,0.4)]">
+                  HOÀN THÀNH VÒNG 1: XUẤT HÀNH!
+                </h2>
+                <p className="text-xl text-purple-200 mb-8 max-w-md">
+                  Chúc mừng các em đã vượt qua Vòng 1: Xuất Hành! Hãy chuẩn bị
+                  tinh thần để chinh phục những thử thách tiếp theo trên hành
+                  trình lên đỉnh Sinai nhé!
+                </p>
+                <button
+                  onClick={() => setActiveTab("welcome")}
+                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-lg transition-transform hover:scale-105 active:scale-95"
+                >
+                  Quay lại Menu Chính
+                </button>
+              </div>
+            )}
+            {activeTab === "round1" && !isRound1Finished && (
               <Round1
                 db={db}
                 currentQIndex={currentQIndex}
@@ -861,7 +922,26 @@ export default function App() {
               />
             )}
 
-            {activeTab === "round2" && (
+            {activeTab === "round2" && isRound2Finished && (
+              /* Màn hình chúc mừng hoàn thành vòng thi */
+              <div className="h-full w-full flex flex-col justify-center items-center text-center p-10 animate-fade-in">
+                <h2 className="text-5xl md:text-6xl font-black text-yellow-400 mb-4 drop-shadow-[0_0_15px_rgba(234,179,8,0.4)]">
+                  HOÀN THÀNH VÒNG 2: VƯỢT BIỂN ĐỎ!
+                </h2>
+                <p className="text-xl text-purple-200 mb-8 max-w-md">
+                  Chúc mừng các em đã vượt qua Vòng 2: Vượt Biển Đỏ! Hãy chuẩn
+                  bị tinh thần để chinh phục những thử thách tiếp theo trên hành
+                  trình lên đỉnh Sinai nhé!
+                </p>
+                <button
+                  onClick={() => setActiveTab("welcome")}
+                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-lg transition-transform hover:scale-105 active:scale-95"
+                >
+                  Quay lại Menu Chính
+                </button>
+              </div>
+            )}
+            {activeTab === "round2" && !isRound2Finished && (
               <Round2
                 db={db}
                 currentQIndex={currentQIndex}
@@ -875,6 +955,7 @@ export default function App() {
                 sound={sound}
                 triggerToast={triggerToast}
                 setActiveTab={setActiveTab}
+                completeRound2={completeRound2}
               />
             )}
 
@@ -898,6 +979,7 @@ export default function App() {
                 setThemeImageRevealed={setThemeImageRevealed}
                 triggerToast={triggerToast}
                 setActiveTab={setActiveTab}
+                triggerConfetti={triggerConfetti}
               />
             )}
 

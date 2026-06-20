@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Josefin Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/JosefinSans-VariableFont_wght.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Josefin Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./assets/fonts/JosefinSans-VariableFont_wght.ttf') format('truetype');
+}
+
 @layer base {
   :root {
     --bg: linear-gradient(to-br, #0f172a, #1e293b);
@@ -19,7 +34,8 @@
   }
 
   html {
-  font-size: clamp(13px, 1.48vmin, 36px);
+  /* font-size: clamp(13px, 1.48vmin, 36px); */
+  font-size: clamp(13px, 2vmin, 36px);
 }
 
   body {
@@ -52,4 +68,5 @@
 
 .max-w-question {
   max-width: calc(100% - 150px); /* 1280px */
+  line-height: 4rem !important;
 }

@@ -18,9 +18,11 @@ export default function RoundLayout({
       <div className="relative w-full h-full max-w-6xl rounded-3xl overflow-hidden border border-white/10 bg-slate-950 shadow-2xl">
         <div className="flex items-center justify-between border-b border-white/10 p-5">
           <div className="flex justify-center w-full">
-            <h2 className="text-xl font-black">THỂ LỆ VÒNG: {roundTitle}</h2>
+            <h2 className="text-4xl font-black text-yellow-400">
+              THỂ LỆ VÒNG: {roundTitle}
+            </h2>
             {subtitle && (
-              <p className="text-sm text-purple-300 mt-1">{subtitle}</p>
+              <p className="text-3xl text-yellow-400 mt-1">{subtitle}</p>
             )}
           </div>
           <button
@@ -30,9 +32,11 @@ export default function RoundLayout({
             ✕
           </button>
         </div>
-        <div className="h-[calc(100%-80px)] overflow-y-auto p-6 text-2xl text-slate-200">
+        <div className="h-[calc(100%-80px)] overflow-y-auto p-6 text-4xl text-yellow-400">
           {typeof rulesContent === "string" ? (
-            <div className="whitespace-pre-line">{rulesContent}</div>
+            <div className="whitespace-pre-line" style={{ lineHeight: "3rem" }}>
+              {rulesContent}
+            </div>
           ) : (
             rulesContent
           )}

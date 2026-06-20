@@ -20,10 +20,6 @@ export default function Round4({
   triggerToast,
 }) {
   const [activeCategory, setActiveCategory] = useState(null);
-  const rulesContent = `- Nhấn chọn nhóm chủ đề và điểm số.
-- Mỗi câu có 10s khi bắt đầu.
-- Có thể kích hoạt Ngôi Sao Hy Vọng.
-- Khi mở câu hỏi, bấm "Hoàn thành câu hỏi này" để ghi nhận.`;
   const icons = {
     thanh_kinh: "📖",
     phung_vu: "⛪",
@@ -43,7 +39,7 @@ export default function Round4({
       roundLabel="Vòng 4"
       roundTitle="LÊN NÚI CHÚA"
       onClose={() => setActiveTab("welcome")}
-      rulesContent={rulesContent}
+      rulesContent={db.round4.rule}
       openDialog={false} // start with rules dialog closed
     >
       {!selectedVòng4Question && !activeCategory ? (

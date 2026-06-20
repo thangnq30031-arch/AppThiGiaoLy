@@ -21,18 +21,14 @@ export default function Round3({
   setThemeImageRevealed,
   triggerToast,
   setActiveTab,
+  triggerConfetti,
 }) {
-  const rulesContent = `- Nhấn vào mảnh ghép để xem câu hỏi.
-- Trả lời ĐÚNG để có thể lật mảnh.
-- Nhấn "Mở Toàn Bộ" để xem toàn bộ ảnh.
-- Nhấn "Hiện Đáp Án" để xem câu trả lời chủ đề.`;
-
   return (
     <RoundLayout
       roundLabel="Vòng 3"
       roundTitle="QUA SA MẠC"
       onClose={() => setActiveTab("welcome")}
-      rulesContent={rulesContent}
+      rulesContent={db.round3.rule}
       openDialog={false} // start with rules dialog closed
     >
       <div className="h-full w-full flex flex-col">
@@ -124,6 +120,7 @@ export default function Round3({
                     // if revealing the full image, also reveal the theme answer since it's a big reveal
                     setRound3ThemeAnswerVisible(true);
                     sound.playClapHand();
+                    triggerConfetti();
                   }
                 }}
                 className="bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-black px-4 py-2.5 rounded-xl"

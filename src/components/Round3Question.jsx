@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RoundLayout from "./common/RoundLayout.jsx";
 import MediaViewer from "./common/MediaViewer.jsx";
-import useSpacebarStart from "../hooks/useSpacebarStart.js";
+import { useSpacebarStart } from "../hooks/useSpacebarStart.js";
 import sound from "../lib/sound.js";
 
 export default function Round3Question({
@@ -102,7 +102,7 @@ export default function Round3Question({
                     <MediaViewer
                       mediaType={question?.mediaType}
                       mediaUrl={question?.mediaUrl}
-                      className="max-h-full max-w-full object-contain shadow-2xl"
+                      className="w-full h-full object-contain shadow-2xl"
                     />
                   </div>
                   <button

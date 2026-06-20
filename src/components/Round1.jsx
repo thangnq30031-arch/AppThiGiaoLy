@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import RoundLayout from "./common/RoundLayout.jsx";
 import MediaViewer from "./common/MediaViewer.jsx";
-import useSpacebarStart from "../hooks/useSpacebarStart.js";
+import {
+  useSpacebarStart,
+  useNextButton,
+  usePrevButton,
+} from "../hooks/useSpacebarStart.js";
+import confetti from "canvas-confetti"; // Import thư viện pháo giấy
 
 export default function Round1({
   db,
@@ -15,43 +20,41 @@ export default function Round1({
   triggerToast,
 }) {
   const [isMediaFullscreen, setIsMediaFullscreen] = useState(false);
+
   const q = db.round1[currentQIndex];
 
   useSpacebarStart(triggerCountdown, isMediaFullscreen || isTimerRunning);
 
-  const rulesContent = `- Nhấn nút "Thể lệ" để xem nguyên tắc vòng thi.
-- Nhấn SPACE để bắt đầu đếm ngược nếu chưa có bộ đếm đang chạy.
-- Nhấn vào Hình/Video để mở toàn màn hình.
-- Sau khi hoàn thành câu hỏi, chọn "Câu tiếp theo" để tiếp tục.`;
+  const handleNext = () => {
+    if (currentQIndex < db.round1.length - 1) {
+      setCurrentQIndex(currentQIndex + 1);
+      stopCountdown();
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentQIndex > 0) {
+      setCurrentQIndex(currentQIndex - 1);
+      stopCountdown();
+    }
+  };
+  useNextButton(handleNext, isMediaFullscreen || isTimerRunning);
+  usePrevButton(handlePrev, isMediaFullscreen || isTimerRunning);
 
   return (
     <RoundLayout
       roundLabel="Vòng 1"
       roundTitle="XUẤT HÀNH"
       onClose={() => setActiveTab("welcome")}
-      rulesContent={rulesContent}
+      rulesContent={db.round1.rule}
+      openDialog={true}
     >
       <div className="h-full w-full flex flex-col">
         <div className="flex justify-between items-center mb-6">
-          <div>
+          <div className="flex items-center gap-4">
             <span className="text-sm font-semibold text-purple-300">
               Câu hỏi {currentQIndex + 1} / {db.round1.length}
             </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => {
-                if (currentQIndex < db.round1.length - 1) {
-                  setCurrentQIndex(currentQIndex + 1);
-                  stopCountdown();
-                } else {
-                  triggerToast("Đã hết câu hỏi Vòng 1!");
-                }
-              }}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl"
-            >
-              Câu tiếp theo
-            </button>
           </div>
         </div>
 
@@ -120,7 +123,7 @@ export default function Round1({
                     <MediaViewer
                       mediaType={q.mediaType}
                       mediaUrl={q.mediaUrl}
-                      className="max-h-full max-w-full object-contain shadow-2xl"
+                      className="h-full w-full object-contain shadow-2xl"
                     />
                   </div>
                   <button
