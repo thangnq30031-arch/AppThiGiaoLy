@@ -49,20 +49,53 @@ export default function Round4({
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {db.round4.categories.map((cat) => {
+              const isLocked = (() => {
+                const qs = cat.questions || {};
+                let total = 0;
+                let answered = 0;
+                Object.entries(qs).forEach(([points, arr]) => {
+                  const list = arr || [];
+                  total += list.length;
+                  list.forEach((_, idx) => {
+                    const key = `${cat.id}-${points}-${idx}`;
+                    if (answeredVòng4Questions?.[key]) answered += 1;
+                  });
+                });
+                return total > 0 && answered >= total;
+              })();
+
               return (
-                <div
-                  key={cat.id}
-                  className="bg-black/30 hover:bg-white/10 rounded-2xl border border-white/10 p-5 flex flex-col justify-between cursor-pointer hover:scale-105 transition-transform"
-                  onClick={() => setActiveCategory(cat.id)}
-                >
-                  <div className="text-center border-white/10 pb-3 mb-4">
-                    <div className="text-5xl mb-2 mt-4">
-                      {icons[cat.id] || "❓"}
+                <div key={cat.id} className="relative">
+                  <div
+                    className={`bg-black/30 ${isLocked ? "opacity-50 cursor-not-allowed" : "hover:bg-white/10 hover:scale-105 cursor-pointer"} rounded-2xl border border-white/10 p-5 flex flex-col justify-between transition-transform`}
+                    onClick={() => {
+                      if (isLocked) {
+                        if (typeof triggerToast === "function") {
+                          triggerToast(
+                            "Chủ đề đã được khóa — đã mở hết các câu hỏi",
+                          );
+                        }
+                        return;
+                      }
+                      setActiveCategory(cat.id);
+                    }}
+                  >
+                    <div className="text-center border-white/10 pb-3 mb-4">
+                      <div className="text-5xl mb-2 mt-4">
+                        {icons[cat.id] || "❓"}
+                      </div>
+                      <h2 className="font-black  text-white text-4xl">
+                        {title[cat.id]}
+                      </h2>
                     </div>
-                    <h2 className="font-black  text-white text-4xl">
-                      {title[cat.id]}
-                    </h2>
                   </div>
+                  {isLocked && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="bg-black/60 text-yellow-300 font-black px-4 py-2 rounded-xl">
+                        🔒 Đã khóa
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}

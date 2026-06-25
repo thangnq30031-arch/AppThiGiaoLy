@@ -14,6 +14,8 @@ export default function Round3Question({
   triggerCountdown,
   revealSinglePiece,
   setActiveTab,
+  incorrectlyAnsweredQuestions,
+  markIncorrectAnswer,
 }) {
   const [isMediaFullscreen, setIsMediaFullscreen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -142,7 +144,9 @@ export default function Round3Question({
               return (
                 <button
                   key={letter}
-                  onClick={() => setSelectedAnswer(letter)}
+                  onClick={() => {
+                    setSelectedAnswer(letter);
+                  }}
                   disabled={disabledOption}
                   className={`p-6 md:p-8 rounded-3xl text-left flex items-center justify-between gap-4 transition-all ${optionClass}`}
                 >
@@ -210,6 +214,7 @@ export default function Round3Question({
           <button
             onClick={() => {
               setShowQuestionAnswer(false);
+              markIncorrectAnswer(selectedPuzzleQ);
               setActiveTab("round3");
             }}
             className={`font-bold px-6 py-3 rounded-xl text-sm transition-all bg-red-600 hover:bg-red-700 text-white cursor-pointer`}

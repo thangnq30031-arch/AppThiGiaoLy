@@ -293,6 +293,8 @@ export default function App() {
   const [themeImageRevealed, setThemeImageRevealed] = useState(false);
   const [selectedPuzzleQ, setSelectedPuzzleQ] = useState(null);
   const [puzzleAnswersStatus, setPuzzleAnswersStatus] = useState({});
+  const [incorrectlyAnsweredQuestions, setIncorrectlyAnsweredQuestions] =
+    useState({});
   const [round3ThemeAnswerVisible, setRound3ThemeAnswerVisible] =
     useState(false);
   const [round3QuestionAnswerVisible, setRound3QuestionAnswerVisible] =
@@ -457,6 +459,7 @@ export default function App() {
     setThemeImageRevealed(false);
     setSelectedPuzzleQ(null);
     setPuzzleAnswersStatus({});
+    setIncorrectlyAnsweredQuestions({});
     setRound3ThemeAnswerVisible(false);
     setRound3QuestionAnswerVisible(false);
 
@@ -965,6 +968,7 @@ export default function App() {
                 puzzlePieces={puzzlePieces}
                 revealedPieces={revealedPieces}
                 puzzleAnswersStatus={puzzleAnswersStatus}
+                incorrectlyAnsweredQuestions={incorrectlyAnsweredQuestions}
                 themeImageRevealed={themeImageRevealed}
                 selectedPuzzleQ={selectedPuzzleQ}
                 setSelectedPuzzleQ={setSelectedPuzzleQ}
@@ -994,6 +998,13 @@ export default function App() {
                 triggerCountdown={triggerVòng3Countdown}
                 revealSinglePiece={revealSinglePiece}
                 setActiveTab={setActiveTab}
+                incorrectlyAnsweredQuestions={incorrectlyAnsweredQuestions}
+                markIncorrectAnswer={(index) =>
+                  setIncorrectlyAnsweredQuestions((prev) => ({
+                    ...prev,
+                    [index]: true,
+                  }))
+                }
               />
             )}
 

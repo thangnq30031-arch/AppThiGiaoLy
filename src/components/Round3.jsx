@@ -7,6 +7,7 @@ export default function Round3({
   puzzlePieces,
   revealedPieces,
   puzzleAnswersStatus,
+  incorrectlyAnsweredQuestions,
   themeImageRevealed,
   selectedPuzzleQ,
   setSelectedPuzzleQ,
@@ -48,11 +49,13 @@ export default function Round3({
                   const revealed =
                     !!revealedPieces[piece.index] || themeImageRevealed;
                   const answered = !!puzzleAnswersStatus[piece.index];
+                  const isIncorrect =
+                    !!incorrectlyAnsweredQuestions[piece.index];
                   return (
                     <div
                       key={piece.index}
                       onClick={() => {
-                        if (revealed) return;
+                        if (revealed || isIncorrect) return;
                         setSelectedPuzzleQ(piece.index);
                         // hide question answer when opening
                         setRound3QuestionAnswerVisible(false);
@@ -63,7 +66,7 @@ export default function Round3({
                         transition: "all 0.8s cubic-bezier(0.4,0,0.2,1)",
                       }}
                       className={`absolute inset-0 flex items-center justify-center
-                        cursor-pointer ${revealed ? "opacity-0 pointer-events-none scale-90 translate-y-4" : "bg-gradient-to-br from-indigo-900 via-purple-950 to-slate-900  active:scale-95"}`}
+                        ${revealed ? "opacity-0 pointer-events-none scale-90 translate-y-4" : isIncorrect ? "bg-gradient-to-br from-indigo-900 via-purple-950 to-slate-900 pointer-events-auto cursor-not-allowed" : "cursor-pointer bg-gradient-to-br from-indigo-900 via-purple-950 to-slate-900 active:scale-95"}`}
                     >
                       {!revealed && (
                         <div
@@ -73,7 +76,7 @@ export default function Round3({
                             top: `${piece.centerY}%`,
                             transform: "translate(-50%, -50%)",
                           }}
-                          className={`w-20 h-20 rounded-full flex items-center justify-center font-black text-3xl border-2 shadow-2xl ${answered ? "bg-emerald-600 border-emerald-300 text-white" : "bg-slate-900 border-yellow-400 text-yellow-400 hover:scale-110"}`}
+                          className={`w-20 h-20 rounded-full flex items-center justify-center font-black text-3xl border-2 shadow-2xl ${answered ? "bg-emerald-600 border-emerald-300 text-white" : isIncorrect ? "bg-red-600 border-red-300 text-white" : "bg-slate-900 border-yellow-400 text-yellow-400 hover:scale-110"}`}
                         >
                           {idx + 1}
                         </div>
